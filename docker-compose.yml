@@ -1,0 +1,44 @@
+version: "3"
+
+services:
+  python-app:
+    image: image_name
+    ports:
+      - "5001:5001"
+    restart: unless-stopped
+
+  react-app:
+    build:
+      context: ./react-app
+    ports:
+      - "8080:80"
+    depends_on:
+      - python-app
+    restart: unless-stopped
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: mydatabase
+    restart: unless-stopped
+
+  rabbitmq:
+    image: "rabbitmq:latest"
+    ports:
+      - "5672:5672"
+    restart: unless-stopped
+
+  consumer:
+    build:
+      context: ./rabbitMQ
+    depends_on:
+      - mongodb
+      - rabbitmq
+    restart: unless-stopped
+
+volumes:
+  mongo-data:

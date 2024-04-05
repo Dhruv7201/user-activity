@@ -1,0 +1,33 @@
+/* UserCalendar.css */
+
+.calendar-container {
+  margin: 20px auto;
+  max-width: 1000px;
+}
+
+.present-date {
+  background-color: #4caf50; /* Green */
+  color: white;
+  font-weight: bold; /* Add this line to make the font weight bold */
+  font-size: 16px; /* Add this line to control the font size */
+}
+
+.absent-date {
+  background-color: #ff5722; /* Red */
+  color: white;
+  font-weight: bold; /* Add this line to make the font weight bold */
+  font-size: 16px; /* Add this line to control the font size */
+}
+
+.selected-date {
+  background-color: #2196f3; /* Blue */
+  color: white;
+  font-weight: bold; /* Add this line to make the font weight bold */
+  font-size: 16px; /* Add this line to control the font size */
+}
+
+.react-calendar:hover,
+.react-calendar__tile:hover {
+  background-color: transparent !important;
+  color: inherit !important;
+}
