@@ -1254,12 +1254,15 @@ h6 {
   animation: ease-in-out;
 }
 .side-item li {
-  transition: all 0.3s ease; /* Add a transition effect */
+  transition: all 0.3s ease;
 }
 
-.side-item li:hover {
-  transform: scale(1.1); /* Add a scale effect */
+.side-item li a.active {
+  background-color: #f6f9ff; /* Add a background color */
+  border-left: 4px solid #4154f1; /* Add a border on the left side */
+  animation: ease-in-out;
 }
+
 .nav-link .flex span {
   padding-left: 10px; /* Adjust this value as needed */
 }
