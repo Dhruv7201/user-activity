@@ -2,11 +2,23 @@ import os
 import sys
 import shutil
 import win32com.client
+from datetime import datetime
 
 
 directory = os.path.expanduser('~')
+directory = os.path.join(directory, 'activity')
+if not os.path.exists(directory):
+    os.makedirs(directory)
 window_file_name = sys.argv[0].split("\\")[-1].split(".")[0]
 window_exe_name = window_file_name + ".exe"
+today = datetime.now().strftime("%Y-%m-%d")
+error_log_file = os.path.join(directory, 'logs', f'error_log_{today}.json')
+if not os.path.exists(os.path.join(directory, 'logs')):
+    os.makedirs(os.path.join(directory, 'logs'))
+if not os.path.exists(error_log_file):
+    with open(error_log_file, 'w') as f:
+        f.write("Error Log\n")
+
 
 
 def copy_exe_to_user_folder():
@@ -17,7 +29,8 @@ def copy_exe_to_user_folder():
         # copy exe to user folder
         shutil.copy(f"{window_exe_name}", directory)
     except Exception as e:
-        print("Error copying exe to user folder:", str(e))
+        with open(error_log_file, 'a') as f:
+            f.write(f"Error while copying exe to user folder: {e}\n")
 
 def create_shortcut(target_path, shortcut_name, description="Shortcut to My App"):
     try:
@@ -37,7 +50,8 @@ def create_shortcut(target_path, shortcut_name, description="Shortcut to My App"
         else:
             print("Shortcut already exists at", shortcut_path)
     except Exception as e:
-        print("Error creating shortcut:", str(e))
+        with open(error_log_file, 'a') as f:
+            f.write(f"Error while creating shortcut: {e}\n")
 
 def copy_shortcut_to_startup(shortcut_path):
     print("Copying shortcut to startup folder...")
@@ -56,7 +70,8 @@ def copy_shortcut_to_startup(shortcut_path):
         else:
             print("Source shortcut not found:", shortcut_path)
     except Exception as e:
-        print("Error copying shortcut to startup folder:", str(e))
+        with open(error_log_file, 'a') as f:
+            f.write(f"Error while copying shortcut to startup folder: {e}\n")
 
 def startup_config():
     try:
@@ -73,6 +88,7 @@ def startup_config():
         # Copy the shortcut to the user's Startup folder
         copy_shortcut_to_startup(shortcut_name)
     except Exception as e:
-        print("Startup configuration error:", str(e))
+        with open(error_log_file, 'a') as f:
+            f.write(f"Error in startup_config: {e}\n")
 
 

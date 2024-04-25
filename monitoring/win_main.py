@@ -14,38 +14,29 @@ import requests
 
 directory = os.path.expanduser('~')
 user_name = directory.split("\\")[-1]
+directory = os.path.join(directory, 'activity')
+if not os.path.exists(directory):
+    os.makedirs(directory)
 user_name = 'dhruv'
 ss_dir = directory + '\ss'
 running = True
 last_mouse_activity = time.time()
 last_keyboard_activity = time.time()
 today = datetime.now().strftime("%Y-%m-%d")
-api_url = "api_url"
-
-screen_shot_interval = int(requests.get(f'{api_url}screen_shot_interval/{user_name}/').json()['screen_shot_interval'])
-ideal_time_threshold = int(requests.get(f'{api_url}ideal_time_threshold/{user_name}/').json()['ideal_time_threshold'])
-
+api_url = "https://api.useractivity.ethicstechnology.net/api/"
+api_url = "http://192.168.0.133:5001/api/"
+# screen_shot_interval = int(requests.get(f'{api_url}screen_shot_interval/{user_name}/').json()['screen_shot_interval'])
+# ideal_time_threshold = int(requests.get(f'{api_url}ideal_time_threshold/{user_name}/').json()['ideal_time_threshold'])
+screen_shot_interval = 3600
+ideal_time_threshold = 10
 print("Screen shot interval: ", screen_shot_interval)
 print("Ideal time threshold: ", ideal_time_threshold)
 
 
-ignore_window_titles = [
-    "Battery Meter", "Network Flyout", "Window", "Task Host Window", "Folder In Use",
-    "GDI+ Window (Explorer.EXE)", "Mail", "Add an account", "DDE Server Window",
-    "OneDrive - Personal", "NotifyIconWindowTitle", "SecurityHealthSystray",
-    "MS_WebcheckMonitor", "Settings", "Rtc Video PnP Listener", "AcrobatTrayIcon",
-    "ESET Proxy", "GDI+ Window (eguiproxy.exe)", "Microsoft Text Input Application",
-    "NvSvc", "BluetoothNotificationAreaIconWindowClass", "UxdService",
-    "Windows Push Notifications Platform", "NvContainerWindowClass00000A20",
-    "DWM Notification Window", "MSCTFIME UI", "Default IME", "Program Manager",
-    ".NET-BroadcastEventWindow.b7ab7b.0", "NvContainerWindowClass00002B90",
-    "InnoSetupLdrWindow", "Setup - Microsoft Visual Studio Code (User)",
-    "Progress", "Setup", "Microsoft Office Sync Process", "OfficePowerManagerWindow",
-    "GDI+ Window (MsoSync.exe)", "NvContainerWindowClass0000114C",
-]
-
 def take_screen_shot():
     while True:
+        if datetime.now().hour < 9 or datetime.now().hour > 21:
+            continue
         print("Taking screenshot...")
         screenshot = pyautogui.screenshot()
         user = get_uid()
@@ -76,12 +67,14 @@ def get_opened_windows():
     global data
     try:
         while True:
+            if datetime.now().hour < 9 or datetime.now().hour > 21:
+                continue
             time.sleep(1)
-            if not data:
-                if data['date'] != today:
+            if data:
+                if data['date'] != datetime.now().strftime("%Y-%m-%d"):
                     data = {
                         "user_id": get_uid(),
-                        "date": today,
+                        "date": datetime.now().strftime("%Y-%m-%d"),
                         "list_of_app": [],
                         "idle_time": "00:00:00"
                     }
@@ -90,7 +83,7 @@ def get_opened_windows():
 
             def enum_handler(hwnd, ctx):
                 window_title = win32gui.GetWindowText(hwnd)
-                if window_title not in ignore_window_titles and window_title != '':
+                if window_title != '':
                     found_window = None
                     if window_title in existing_window_titles:
                         found_window = next(window for window in data["list_of_app"] if window["window_title"] == window_title)
@@ -139,6 +132,8 @@ def detect_inactivity():
     keyboard_listener.start()
     try:
         while True:
+            if datetime.now().hour < 9 or datetime.now().hour > 21:
+                continue
             current_time = time.time()
             mouse_inactive_time = current_time - last_mouse_activity
             keyboard_inactive_time = current_time - last_keyboard_activity

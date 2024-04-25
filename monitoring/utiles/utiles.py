@@ -7,18 +7,18 @@ import time
 from .u_id import get_uid
 
 directory = os.path.expanduser('~')
-today = datetime.now().strftime("%Y-%m-%d")
-log_file = os.path.join(directory, 'logs', f'log_{today}.json')
-error_log_file = os.path.join(directory, 'logs', f'error_log_{today}.json')
-host = 'host'
+directory = os.path.join(directory, 'activity')
+if not os.path.exists(directory):
+    os.makedirs(directory)
+host = '164.52.204.75'
 port = 5672
 virtual_host = '/'
-username = 'username'
-password = 'password'
-bucket_link = "bucket-link"
-bucket_name = 'bucket-name'
-access_key = 'access-key'
-secret_key = 'secret-key'
+username = 'valuusragent'
+password = 'Lh85*3q'
+bucket_link = "objectstore.e2enetworks.net"
+bucket_name = 'test-db'
+access_key = 'IEWC51DQAPVJ489HHOGC'
+secret_key = '7WH5WYAW5OAC4NYX6G0LVBGG8NCOTQX9IBTGVLY2'
 
 
 
@@ -57,7 +57,8 @@ def write_in_log(log_msg, log_file):
         json.dump(log_msg, f, indent=4, cls=DateTimeEncoder)
 
 def read_log_file():
-    global log_file
+    today = datetime.now().strftime("%Y-%m-%d")
+    log_file = os.path.join(directory, 'logs', f'log_{today}.json')
     if os.path.exists(log_file):
         with open(log_file, 'r') as f:
             file_content = f.read()
@@ -91,7 +92,9 @@ def rabbitMQ_connection():
     return channel
 
 def write_in_rabbitMQ(log_msg):
-    global log_file
+    today = datetime.now().strftime("%Y-%m-%d")
+    log_file = os.path.join(directory, 'logs', f'log_{today}.json')
+    error_log_file = os.path.join(directory, 'logs', f'error_log_{today}.json')
     flag = check_internet()
     if flag:
         try:

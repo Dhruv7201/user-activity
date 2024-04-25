@@ -1,7 +1,10 @@
 import os
 
 # Specify the directory where 'uuid.txt' should be located
-directory = os.path.expanduser('~')  # This points to the user's home directory
+directory = os.path.expanduser('~')
+directory = os.path.join(directory, 'activity')
+if not os.path.exists(directory):
+    os.makedirs(directory)
 uuid_file = os.path.join(directory, 'uuid.txt')
 
 
