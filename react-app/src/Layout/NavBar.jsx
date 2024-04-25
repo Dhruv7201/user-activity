@@ -42,8 +42,6 @@ function NavBar() {
       location.pathname === "/apps"
     ) {
       setAnalyticsOpen(true);
-    } else {
-      setAnalyticsOpen(false);
     }
   }, [location.pathname]);
 
