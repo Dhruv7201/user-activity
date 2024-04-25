@@ -42,3 +42,4 @@ This project is a comprehensive Employee Monitoring System with a FastAPI backen
 ## Contributors
 
 - [Dhruv modi](www.github.com/Dhruv7201)
+
