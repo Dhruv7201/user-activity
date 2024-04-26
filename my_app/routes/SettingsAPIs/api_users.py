@@ -1,9 +1,24 @@
 from fastapi import APIRouter, Query, Path, Header
 from fastapi.responses import JSONResponse
 from methods.db_method import db_connection
+from minio import Minio
 
 
 api_users = APIRouter()
+
+
+folder_path = "ss"
+access_key = 'your-access-key'
+secret_key = 'your-secret-key'
+minio_host = "bucket-url"
+minio_bucket = "bucket-name"
+
+client = Minio(
+    minio_host,
+    access_key=access_key,
+    secret_key=secret_key,
+    secure=True,
+)
 
 
 @api_users.get("/users", tags=["SettingsPage"])
@@ -25,16 +40,26 @@ async def get_users(teamname: str = Header(...)):
 
 @api_users.delete("/users/{user_id}", tags=["SettingsPage"])
 async def delete_user(user_id: str):
-    db = db_connection()
-    collection = db['users']
-    collection.delete_one({'user_id': user_id})
-    user_data = db['user_data']
-    user_data.delete_one({'user_id': user_id})
-    user_list = []
-    users = collection.find()
-    for user in users:
-        user_list.append(user['user_id'])
-    return JSONResponse(content=user_list)
+    try:
+        db = db_connection()
+        collection = db['users']
+        collection.delete_one({'user_id': user_id})
+        user_data = db['user_data']
+        user_data.delete_one({'user_id': user_id})
+        # delete from object storage
+        objects = client.list_objects(minio_bucket, prefix=f"ss/", recursive=True)
+        for obj in objects:
+            if '\\' in obj.object_name:
+                continue
+            if obj.object_name.split("/")[2] == user_id:
+                client.remove_object(minio_bucket, obj.object_name)
+        user_list = []
+        users = collection.find()
+        for user in users:
+            user_list.append(user['user_id'])
+        return JSONResponse(content=user_list)
+    except Exception as e:
+        return JSONResponse(content={'error': str(e)})
 
 
 @api_users.get("/user_list", tags=["SettingsPage"])

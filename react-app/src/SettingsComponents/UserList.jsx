@@ -27,7 +27,7 @@ const UserList = () => {
       await del(`/users/${usernameToDelete}`);
       console.log("User deleted:", usernameToDelete);
       const response = await get("/users");
-      setUserList(response.data.user_list);
+      setUserList(Object.entries(response.data.user_list));
     } catch (error) {
       console.error("Error deleting user:", error);
     }
@@ -97,16 +97,16 @@ const UserList = () => {
   return (
     <div>
       <div className="search-bar">
-        <Row>
-          <Col xs={12} sm={6}>
+        <div className="row">
+          <div className="col">
             <Form.Control
               type="text"
               placeholder="Search by User"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-          </Col>
-          <Col xs={12} sm={6}>
+          </div>
+          <div className="col">
             <Button
               variant="danger btn-sm"
               onClick={() => setSearchTerm("")}
@@ -114,8 +114,8 @@ const UserList = () => {
             >
               Clear
             </Button>
-          </Col>
-        </Row>
+          </div>
+        </div>
       </div>
       <DataTable
         title="User List"

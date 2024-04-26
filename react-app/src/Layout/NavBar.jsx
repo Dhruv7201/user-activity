@@ -121,10 +121,10 @@ function NavBar() {
       </header>
       <aside id="sidebar" className="sidebar">
         <ul className="sidebar-nav" id="sidebar-nav">
-          <li className="nav-item">
+          <li className="nav-item mb-1">
             <Link
-              className={`nav-link collapsed${
-                location.pathname === "/dashboard" ? ".active" : ""
+              className={`nav-link ${
+                location.pathname === "/dashboard" ? "active" : ""
               }`}
               to="/dashboard"
             >
@@ -143,9 +143,9 @@ function NavBar() {
               </div>
             </Link>
           </li>
-          <li className="nav-item">
+          <li className="nav-item mb-1">
             <Link
-              className={`nav-link collapsed${
+              className={`nav-link ${
                 location.pathname === "/attendance" ? "active" : ""
               }`}
               to="/attendance"
@@ -168,10 +168,12 @@ function NavBar() {
               </div>
             </Link>
           </li>
-          <li className="nav-item">
+          <li className="nav-item mb-1">
             <a
               style={{ cursor: "pointer", userSelect: "none" }}
-              className={`nav-link ${isAnalyticsOpen ? "" : "collapsed"}`}
+              className={`nav-link ${
+                isAnalyticsOpen ? "" : "collapsed"
+              } justify-content-between`}
               onClick={toggleAnalytics}
               aria-expanded={isAnalyticsOpen ? "true" : "false"}
             >
@@ -189,14 +191,45 @@ function NavBar() {
                     d="M0 0h1v15h15v1H0zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61L13.445 4H10.5a.5.5 0 0 1-.5-.5"
                   />
                 </svg>
+
                 <span>Analytics</span>
               </div>
+              {isAnalyticsOpen ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  width="512"
+                  height="512"
+                  // make this on right side of div and center vertically
+                  style={{
+                    height: "1rem",
+                    width: "1rem",
+                  }}
+                >
+                  <g id="_01_align_center" data-name="01 align center">
+                    <path d="M17.293,15.207,12,9.914,6.707,15.207,5.293,13.793,10.586,8.5a2,2,0,0,1,2.828,0l5.293,5.293Z" />
+                  </g>
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  width="512"
+                  height="512"
+                  style={{
+                    height: "1rem",
+                    width: "1rem",
+                  }}
+                >
+                  <g id="_01_align_center" data-name="01 align center">
+                    <path d="M12,15.5a1.993,1.993,0,0,1-1.414-.585L5.293,9.621,6.707,8.207,12,13.5l5.293-5.293,1.414,1.414-5.293,5.293A1.993,1.993,0,0,1,12,15.5Z" />
+                  </g>
+                </svg>
+              )}
             </a>
             <ul
               id="analytics-nav"
-              className={`nav-content collapse ${
-                isAnalyticsOpen ? "show" : "hide"
-              }`}
+              className={`nav-content ${isAnalyticsOpen ? "show" : "hide"}`}
               data-bs-parent="#sidebar-nav"
             >
               <div className="side-item">
@@ -233,9 +266,9 @@ function NavBar() {
               </div>
             </ul>
           </li>
-          <li className="nav-item">
+          <li className="nav-item mb-1">
             <Link
-              className={`nav-link collapsed${
+              className={`nav-link ${
                 location.pathname.includes("/reports") ? "active" : ""
               }`}
               to="/reports"
@@ -255,9 +288,9 @@ function NavBar() {
               </div>
             </Link>
           </li>
-          <li className="nav-item">
+          <li className="nav-item mb-1">
             <Link
-              className={`nav-link collapsed${
+              className={`nav-link ${
                 location.pathname === "/employee" ? "active" : ""
               }`}
               to="/employee"
@@ -278,10 +311,12 @@ function NavBar() {
             </Link>
           </li>
           {isAdmin && (
-            <li className="nav-item">
+            <li className="nav-item mb-1">
               <a
                 style={{ cursor: "pointer", userSelect: "none" }}
-                className={`nav-link ${isSettingsOpen ? "" : "collapsed"}`}
+                className={`nav-link ${
+                  isSettingsOpen ? "" : "collapsed"
+                } justify-content-between`}
                 onClick={toggleSettings}
                 aria-expanded={isSettingsOpen ? "true" : "false"}
               >
@@ -299,6 +334,38 @@ function NavBar() {
                   </svg>
                   <span>Settings</span>
                 </div>
+                {isSettingsOpen ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    width="512"
+                    height="512"
+                    // make this on right side of div and center vertically
+                    style={{
+                      height: "1rem",
+                      width: "1rem",
+                    }}
+                  >
+                    <g id="_01_align_center" data-name="01 align center">
+                      <path d="M17.293,15.207,12,9.914,6.707,15.207,5.293,13.793,10.586,8.5a2,2,0,0,1,2.828,0l5.293,5.293Z" />
+                    </g>
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    width="512"
+                    height="512"
+                    style={{
+                      height: "1rem",
+                      width: "1rem",
+                    }}
+                  >
+                    <g id="_01_align_center" data-name="01 align center">
+                      <path d="M12,15.5a1.993,1.993,0,0,1-1.414-.585L5.293,9.621,6.707,8.207,12,13.5l5.293-5.293,1.414,1.414-5.293,5.293A1.993,1.993,0,0,1,12,15.5Z" />
+                    </g>
+                  </svg>
+                )}
               </a>
               <ul
                 id="analytics-nav"
