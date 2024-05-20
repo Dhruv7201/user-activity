@@ -37,7 +37,7 @@ function DateRange() {
           <div className="card-body">
             <h5 className="card-title">Select Date Range:</h5>
             <div className="row mb-3">
-              <div className="col-3">
+              <div className="col-lg-5 col-md-4 col-sm-5 col-4">
                 <input
                   type="date"
                   className="form-control"
@@ -48,8 +48,10 @@ function DateRange() {
                   max={today.toISOString().split("T")[0]}
                 />
               </div>
-              <label className="col-3 mt-1 mb-1">To</label>
-              <div className="col-3">
+              <label className="col-lg-1 col-md-2 col-sm-1 col-2 text-center col-form-label">
+                To
+              </label>
+              <div className="col-lg-5 col-md-4 col-sm-5 col-4">
                 <input
                   type="date"
                   className="form-control"
@@ -58,7 +60,7 @@ function DateRange() {
                   max={today.toISOString().split("T")[0]}
                 />
               </div>
-              <div className="col-3">
+              <div className="col-lg-1 col-md-2 col-sm-1 col-2">
                 <Button
                   onClick={handleClearDate}
                   className="btn btn-primary"

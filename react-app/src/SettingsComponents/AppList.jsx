@@ -41,13 +41,13 @@ function AppList() {
   return (
     <>
       <Card>
-        <Card.Header
+        <Card.Header className='show-list'
           onClick={toggleCollapse}
           style={{
             cursor: 'pointer',
             transition: 'background-color 0.3s ease-in-out',
-            backgroundColor: collapseOpen ? '#dc3545' : '#007bff',
-            color: 'white',
+            backgroundColor: collapseOpen ? '#f6f9ff' : '#fff',
+            color: '#012970',
           }}
         >
           {collapseOpen ? 'Hide Unproductive List' : 'Show Unproductive List'}
@@ -55,7 +55,7 @@ function AppList() {
 
         <Collapse in={collapseOpen} style={{ transition: 'height 0.3s ease-in-out' }}>
           <Card.Body>
-            <ListGroup>
+            <ListGroup className='listgroup'>
               {groups.map((group, index) => (
                 <ListGroup.Item key={index} className="d-flex justify-content-between">
                   <div>
@@ -67,7 +67,7 @@ function AppList() {
                     </div>
                   </div>
                   <Button
-                    variant="danger"
+                    variant="primary"
                     value={group.name} // Use the "name" as the identifier
                     onClick={handleDelete}
                   >

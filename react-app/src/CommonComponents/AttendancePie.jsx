@@ -15,6 +15,7 @@ const AttendancePie = () => {
     )
       .then((response) => {
         setChartData(response.data);
+        console.log(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -44,10 +45,8 @@ const AttendancePie = () => {
 
   return (
     <div className="card">
-      <div className="card-header">
-        <h4 className="card-title">Attendance</h4>
-      </div>
       <div className="card-body">
+        <h5 className="card-title">Attendance</h5>
         <div className="chart">
           <ReactApexChart
             options={options}
@@ -55,16 +54,6 @@ const AttendancePie = () => {
             type="donut"
             height={350}
           />
-        </div>
-      </div>
-      <div className="card-footer">
-        <div className="d-flex justify-content-between">
-          <div className="stats">
-            <a>Present: {totalPresent}</a>
-          </div>
-          <div className="stats">
-            <a>Absent: {totalAbsent}</a>
-          </div>
         </div>
       </div>
     </div>

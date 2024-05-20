@@ -13,20 +13,19 @@ const LateArrivalsList = () => {
   }, []);
   return (
     <>
-      <div className="card">
-        <div className="card-header">
-          <h4 className="card-title">Late Arrivals List</h4>
-        </div>
-        <div className="card-body tableSize">
-          <table className="table table-hover">
-            <thead className="most-prod-head">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Most Active User</h5>
+
+          <table class="table table-hover">
+            <thead>
               <tr>
                 <th>Rank</th>
                 <th>User Name</th>
                 <th>Arrived At</th>
               </tr>
             </thead>
-            <tbody className="most-prod-user">
+            <tbody>
               {Object.entries(users).map(([userName, time], index) => (
                 <tr key={userName}>
                   <th>{index + 1}</th>

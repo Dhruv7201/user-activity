@@ -52,16 +52,18 @@ const AppDetails = () => {
             <tbody className="most-prod-user">
               {Object.keys(userList).map((userId, index) => (
                 <tr key={index}>
-                  <th>{index + 1}</th>
-                  <Link to={`/employee/${userId}`} className="link-style">
-                    <td>{userId}</td>
-                  </Link>
+                  <td><b>{index + 1}</b></td>
                   <td>
-                    <div>
+                    <Link to={`/employee/${userId}`} className="link-style">
+                      <td>{userId}</td>
+                    </Link>
+                  </td>
+                  <td>
+                    <ul>
                       {userList[userId].start_time.map((startTime, i) => (
-                        <div key={i}>{startTime}</div>
+                        <li key={i}>{startTime}</li>
                       ))}
-                    </div>
+                    </ul>
                   </td>
                   <td>
                     <div>

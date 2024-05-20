@@ -36,36 +36,36 @@ const AttendancePage = () => {
       </div>
       <section class="section dashboard">
         <DateRange />
-        <Row>
-          <Col>
+        <div class="row">
+          <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
             <AttendancePercentage />
-          </Col>
-          <Col>
+          </div>
+          <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
             <LateArrivals />
-          </Col>
-          <Col>
+          </div>
+          <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
             <IdleTime />
-          </Col>
-          <Col>
+          </div>
+          <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
             <WorkTime />
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={5}>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6">
             <AttendancePie />
-          </Col>
-          <Col sm={7}>
+          </div>
+          <div class="col-lg-6">
             <AttendanceBar />
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={6}>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6">
             <IdleList />
-          </Col>
-          <Col sm={6}>
+          </div>
+          <div class="col-lg-6">
             <LateArrivalsList />
-          </Col>
-        </Row>
+          </div>
+        </div>
       </section>
     </>
   );

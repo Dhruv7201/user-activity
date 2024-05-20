@@ -105,16 +105,12 @@ const AppBarChart = () => {
   };
 
   return (
-    <Card>
-      <Card.Header>
-        <Card.Title>Top Seven Used Apps</Card.Title>
-      </Card.Header>
-      <Card.Body>
-        <div className="chart">
-          <Bar data={appsData} options={options} />
-        </div>
-      </Card.Body>
-    </Card>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Top Seven Used Apps</h5>
+        <Bar data={appsData} options={options} />
+      </div>
+    </div>
   );
 };
 

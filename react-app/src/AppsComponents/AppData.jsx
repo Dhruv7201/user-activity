@@ -83,7 +83,7 @@ function AppData() {
         <div className="card-header">
           <div className="flex-container">
             <Row>
-              <Col sm={6}>
+              <Col sm={5}>
                 <input
                   type="text"
                   placeholder="Search Application Name"
@@ -98,7 +98,7 @@ function AppData() {
                 className="text-right flex align-items-center justify-content-end mt-1 mb-1"
               >
                 <Button
-                  variant="btn btn-primary btn-sm"
+                  variant="btn btn-primary"
                   onClick={handleClearSearch}
                   disabled={!searchTerm}
                 >

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import DataTable from "react-data-table-component";
 import { useDateContext } from "../Context/DateContext.jsx";
 import { Link } from "react-router-dom";
 import { get } from "../api/api.js";
@@ -82,15 +81,30 @@ function EmployeeList() {
 
   return (
     <>
-      <DataTable
-        columns={columns}
-        data={appData}
-        pagination={true}
-        paginationPerPage={10}
-        paginationRowsPerPageOptions={[10, 20, 30, 40, 50]}
-        highlightOnHover={true}
-        dense={true}
-      />
+      <div className="card">
+        <div className="card-body">
+          <table id="myTable" className="table">
+            <thead>
+              <tr>
+                {columns.map((column) => (
+                  <th key={column.name}>{column.name}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {appData.map((row) => (
+                <tr key={row.name}>
+                  {columns.map((column) => (
+                    <td key={column.name}>
+                      {column.cell ? column.cell(row) : row[column.selector]}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </>
   );
 }

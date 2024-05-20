@@ -40,18 +40,18 @@ const TopList = ({ order, title }) => {
         <Card.Body>
           <Card.Title>{title}</Card.Title>
           <div className="productivity">
-            <Table striped bordered hover className="text-center">
-              <thead>
+            <table className="table table-hover">
+              <thead className="most-prod-head">
                 <tr>
                   <th>Rank</th>
                   <th>User Name</th>
                   <th>User Time</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="most-prod-user">
                 {userList.map((user, index) => (
                   <tr key={user.username}>
-                    <td>{index + 1}</td>
+                    <th>{index + 1}</th>
                     <td>
                       <Link
                         to={`/employee/${user.username}`}
@@ -64,7 +64,7 @@ const TopList = ({ order, title }) => {
                   </tr>
                 ))}
               </tbody>
-            </Table>
+            </table>
           </div>
         </Card.Body>
       </Card>

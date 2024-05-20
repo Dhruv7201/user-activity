@@ -1,5 +1,4 @@
 import React from "react";
-import { Card, Col, Container, Row, Button } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
 import DailyReport from "../ReportsComponents/DailyReport";
 import MonthlyReport from "../ReportsComponents/MonthlyReport";
@@ -8,6 +7,7 @@ import { useEffect } from "react";
 import { isTokenValid } from "../Utils/authUtils";
 import { removeToken } from "../Utils/authUtils";
 import { useNavigate } from "react-router-dom";
+import { Button } from "react-bootstrap";
 
 const Report = ({ children }) => <div>{children}</div>;
 
@@ -52,56 +52,69 @@ const ReportsPage = () => {
           <div class="pagetitle">
             <h1>Reports</h1>
           </div>
-          <Row className="mt-4 mb-4">
-            <Col>
-              <Card>
-                <Card.Body>
-                  <Card.Title>Daily Reports</Card.Title>
-                  <Card.Text>View daily report</Card.Text>
-                  <Button as={Link} to="/reports/daily" className="link-style">
-                    View
-                  </Button>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col>
-              <Card>
-                <Card.Body>
-                  <Card.Title>Monthly Reports</Card.Title>
-                  <Card.Text>View attendance reports</Card.Text>
+          <div class="row">
+            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Daily Reports</h5>
+                  <p>View daily report</p>
                   <Button
                     as={Link}
-                    to="/reports/monthly"
-                    className="link-style"
+                    to="/reports/daily"
+                    className="btn btn-primary"
                   >
                     View
                   </Button>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col>
-              <Card>
-                <Card.Body>
-                  <Card.Title>Apps</Card.Title>
-                  <Card.Text>View apps reports</Card.Text>
-                  <Button as={Link} to="/reports/apps" className="link-style">
+                </div>
+              </div>
+            </div>
+
+            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Monthly Reports</h5>
+                  <p>View attendance reports </p>
+                  <Button
+                    as={Link}
+                    to="/reports/monthly"
+                    className="btn btn-primary"
+                  >
                     View
                   </Button>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col>
-              <Card>
-                <Card.Body>
-                  <Card.Title>Screenshots</Card.Title>
-                  <Card.Text>View screenshots reports</Card.Text>
-                  <Button as={Link} to="/screenshots" className="link-style">
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Apps</h5>
+                  <p>View apps reports </p>
+                  <Button
+                    as={Link}
+                    to="/reports/apps"
+                    className="btn btn-primary"
+                  >
                     View
                   </Button>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Screenshots </h5>
+                  <p>View screenshots reports</p>
+                  <Button
+                    as={Link}
+                    to="/screenshots"
+                    className="btn btn-primary"
+                  >
+                    View
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
         </>
       );
   }

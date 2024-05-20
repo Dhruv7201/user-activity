@@ -79,6 +79,8 @@ function AddToGroup({ onAppAdd }) {
 
   return (
     <>
+    <div className="card">
+            <div className="card-body pt-4">
       <Row className="mt-4">
         <Col md={12}>
           <Form.Group>
@@ -153,6 +155,8 @@ function AddToGroup({ onAppAdd }) {
           </Button>
         </Col>
       </Row>
+      </div>
+      </div>
     </>
   );
 }

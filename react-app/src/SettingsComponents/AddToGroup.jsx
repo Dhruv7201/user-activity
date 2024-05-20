@@ -80,19 +80,24 @@ function AddToGroup({ onAddToGroup }) {
   return (
     <>
       <h3 className="mt-4">Group Application</h3>
-      <Row>
+
+      <div className="card">
+            <div className="card-body pt-4">
+      <Row className="mb-4">
         <Col md={12}>
-          <Form.Group>
-            <Form.Label>Application Name:</Form.Label>
-            <Select
-              value={selectedOption}
-              onChange={setSelectedOption}
-              options={options}
-              isClearable={true}
-              isSearchable={true}
-              placeholder="Select or type..."
-            />
-          </Form.Group>
+          
+              <Form.Group>
+                <Form.Label>Application Name:</Form.Label>
+                <Select
+                  value={selectedOption}
+                  onChange={setSelectedOption}
+                  options={options}
+                  isClearable={true}
+                  isSearchable={true}
+                  placeholder="Select or type..."
+                />
+              </Form.Group>
+            
         </Col>
       </Row>
       {suggestions.length > 0 && (
@@ -154,6 +159,8 @@ function AddToGroup({ onAddToGroup }) {
           </Button>
         </Col>
       </Row>
+      </div>
+      </div>
     </>
   );
 }

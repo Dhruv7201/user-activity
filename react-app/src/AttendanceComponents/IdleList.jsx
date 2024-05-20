@@ -34,20 +34,19 @@ const IdleList = () => {
 
   return (
     <>
-      <div className="card">
-        <div className="card-header">
-          <h4 className="card-title">Idle List</h4>
-        </div>
-        <div className="card-body tableSize">
-          <table className="table table-hover">
-            <thead className="most-prod-head">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Most Productive User</h5>
+
+          <table class="table table-hover">
+            <thead>
               <tr>
                 <th>Rank</th>
                 <th>User Name</th>
                 <th>User Time</th>
               </tr>
             </thead>
-            <tbody className="most-prod-user">
+            <tbody>
               {users.map((user, index) => (
                 <tr key={index}>
                   <th>{index + 1}</th>

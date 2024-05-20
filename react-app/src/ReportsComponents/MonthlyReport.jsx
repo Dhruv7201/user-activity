@@ -45,48 +45,23 @@ const MonthlyReport = () => {
 
   return (
     <>
+      <div class="pagetitle">
+        <h1>Monthly Report</h1>
+      </div>
       <MonthSelector
         selectedDate={selectedDate}
         handleDateChange={handleDateChange}
         clearSelectedDate={() => setSelectedDate(new Date())}
         isCurrentMonth={isCurrentMonth(selectedDate)}
       />
-      <div className="card">
-        <div
-          className="scrollable-table-container"
-          style={{ overflowY: "auto" }}
-        >
-          <Table className="card-body tableSize">
-            <thead>
-              <tr>
-                <th
-                  style={{
-                    position: "sticky",
-                    left: 0,
-                    background: "white",
-                    zIndex: 1,
-                  }}
-                >
-                  Employee Name
-                </th>
-                {[...Array(daysInMonth)].map((_, index) => (
-                  <th key={index + 1}>{index + 1}</th>
-                ))}
-                <th>Total Present</th>
-                <th>Total Absent</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Object.keys(monthlyReportData).map((employeeId) => {
-                const employeeData = monthlyReportData[employeeId];
-
-                // Variables to keep track of total present and total absent
-                let totalPresent = 0;
-                let totalAbsent = 0;
-
-                return (
-                  <tr key={employeeId}>
-                    <td
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-body">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th
                       style={{
                         position: "sticky",
                         left: 0,
@@ -94,52 +69,81 @@ const MonthlyReport = () => {
                         zIndex: 1,
                       }}
                     >
-                      <Link
-                        to={`/employee/${employeeData.user_id}`}
-                        className="link-style"
-                      >
-                        {employeeData.user_id}
-                      </Link>
-                    </td>
-                    {[...Array(daysInMonth)].map((_, index) => {
-                      const currentDate = new Date(
-                        selectedDate.getFullYear(),
-                        selectedDate.getMonth(),
-                        index + 1
-                      );
-                      const dayKey = formatApiDate(currentDate);
-                      const attendanceStatus = employeeData[dayKey];
-
-                      // Count total present and total absent
-                      if (attendanceStatus === "P") {
-                        totalPresent += 1;
-                      } else if (attendanceStatus === "A") {
-                        totalAbsent += 1;
-                      }
-
-                      // Set background color based on attendance status
-                      const cellStyle = {
-                        backgroundColor:
-                          attendanceStatus === "P"
-                            ? "#d4edda"
-                            : attendanceStatus === "A"
-                            ? "#f8d7da"
-                            : "white",
-                      };
-
-                      return (
-                        <td key={index + 1} style={cellStyle}>
-                          {attendanceStatus || "-"}
-                        </td>
-                      );
-                    })}
-                    <td>{totalPresent}</td>
-                    <td>{totalAbsent}</td>
+                      Employee Name
+                    </th>
+                    {[...Array(daysInMonth)].map((_, index) => (
+                      <th key={index + 1}>{index + 1}</th>
+                    ))}
+                    <th>Total Present</th>
+                    <th>Total Absent</th>
                   </tr>
-                );
-              })}
-            </tbody>
-          </Table>
+                </thead>
+                <tbody>
+                  {Object.keys(monthlyReportData).map((employeeId) => {
+                    const employeeData = monthlyReportData[employeeId];
+
+                    // Variables to keep track of total present and total absent
+                    let totalPresent = 0;
+                    let totalAbsent = 0;
+
+                    return (
+                      <tr key={employeeId}>
+                        <td
+                          style={{
+                            position: "sticky",
+                            left: 0,
+                            background: "white",
+                            zIndex: 1,
+                          }}
+                        >
+                          <Link
+                            to={`/employee/${employeeData.user_id}`}
+                            className="link-style"
+                          >
+                            {employeeData.user_id}
+                          </Link>
+                        </td>
+                        {[...Array(daysInMonth)].map((_, index) => {
+                          const currentDate = new Date(
+                            selectedDate.getFullYear(),
+                            selectedDate.getMonth(),
+                            index + 1
+                          );
+                          const dayKey = formatApiDate(currentDate);
+                          const attendanceStatus = employeeData[dayKey];
+
+                          // Count total present and total absent
+                          if (attendanceStatus === "P") {
+                            totalPresent += 1;
+                          } else if (attendanceStatus === "A") {
+                            totalAbsent += 1;
+                          }
+
+                          // Set background color based on attendance status
+                          const cellStyle = {
+                            backgroundColor:
+                              attendanceStatus === "P"
+                                ? "#d4edda"
+                                : attendanceStatus === "A"
+                                ? "#f8d7da"
+                                : "white",
+                          };
+
+                          return (
+                            <td key={index + 1} style={cellStyle}>
+                              {attendanceStatus || "-"}
+                            </td>
+                          );
+                        })}
+                        <td>{totalPresent}</td>
+                        <td>{totalAbsent}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </>

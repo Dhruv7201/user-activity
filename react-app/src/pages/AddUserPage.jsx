@@ -76,12 +76,15 @@ const AddUserPage = () => {
       <div class="pagetitle">
         <h1>Add User</h1>
       </div>
+      <div className="card">
+            <div className="card-body pt-4">
       <Form
         onSubmit={(e) => {
           e.preventDefault();
         }}
       >
-        <div className="mb-3">
+      <div className="row mb-4">
+        <div className="col-md-4 mb-3">
           <Form.Label>User Name</Form.Label>
           <Form.Control
             onChange={(e) => {
@@ -92,7 +95,7 @@ const AddUserPage = () => {
             placeholder="Enter User Name"
           />
         </div>
-        <div className="mb-3">
+        <div className="col-md-4 mb-3">
           <Form.Label>User Password</Form.Label>
           <div className="input-group display-flex justify-content-between">
             <Form.Control
@@ -116,7 +119,7 @@ const AddUserPage = () => {
             </Button>
           </div>
         </div>
-        <div className="mb-3">
+        <div className="col-md-4 mb-3">
           <Form.Label>Confirm Password</Form.Label>
           <div className="input-group display-flex justify-content-between">
             <Form.Control
@@ -142,30 +145,35 @@ const AddUserPage = () => {
             </Button>
           </div>
         </div>
-        <div className="mb-3">
-          <Form.Label>Select Teams</Form.Label>
-          {teams.map((team) => (
-            <Form.Check
-              key={team}
-              type="checkbox"
-              id={`team-${team}`}
-              label={team}
-              checked={selectedTeams.includes(team)}
-              onChange={() => {
-                setSelectedTeams((prevTeams) => {
-                  if (prevTeams.includes(team)) {
-                    // Team is already selected, remove it
-                    return prevTeams.filter(
-                      (selectedTeam) => selectedTeam !== team
-                    );
-                  } else {
-                    // Team is not selected, add it
-                    return [...prevTeams, team];
-                  }
-                });
-              }}
-            />
-          ))}
+        </div>
+        <div className="row mb-3">
+          <div className="mb-3">
+            <Form.Label>Select Teams</Form.Label>
+            <div className="select-options">
+            {teams.map((team) => (
+              <Form.Check
+                key={team}
+                type="checkbox"
+                id={`team-${team}`}
+                label={team}
+                checked={selectedTeams.includes(team)}
+                onChange={() => {
+                  setSelectedTeams((prevTeams) => {
+                    if (prevTeams.includes(team)) {
+                      // Team is already selected, remove it
+                      return prevTeams.filter(
+                        (selectedTeam) => selectedTeam !== team
+                      );
+                    } else {
+                      // Team is not selected, add it
+                      return [...prevTeams, team];
+                    }
+                  });
+                }}
+              />
+            ))}
+            </div>
+          </div>
         </div>
         {showErrorAlert && <Alert variant={alertType}>{errorMessage}</Alert>}
         <div className="mb-3">
@@ -180,6 +188,8 @@ const AddUserPage = () => {
           </Button>
         </div>
       </Form>
+      </div>
+      </div>
     </>
   );
 };

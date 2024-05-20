@@ -42,11 +42,13 @@ const MonitoringUserList = () => {
 
   return (
     <>
-      <h1>Monitoring User List</h1>
+      <div className="pagetitle">
+        <h1>Existing Users</h1>
+      </div>
       {users.map((user, index) => (
-        <Card key={index}>
+        <Card className="existing-users" key={index}>
           <Card.Header
-            className="d-flex justify-content-between align-items-center mb-3"
+            className="d-flex justify-content-between align-items-center"
             onClick={() => toggleExpand(index)}
             style={{ cursor: "pointer" }}
           >

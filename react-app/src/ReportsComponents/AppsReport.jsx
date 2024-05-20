@@ -8,25 +8,25 @@ const AppsReport = () => {
   return (
     <>
       <DateRange />
-      <Row>
-        <Col md={3}>
+      <div class="row">
+        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
           <Productivity url="/topApp" title="Top App" />
-        </Col>
-        <Col md={3}>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
           <Productivity url="/topTab" title="Top Tab" />
-        </Col>
-        <Col md={3}>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
           <Productivity url="/topCategory" title="Top Category" />
-        </Col>
-        <Col md={3}>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
           <Productivity url="/topUnproductive" title="Top Unproductive App" />
-        </Col>
-      </Row>
-      <Row className="mt-4 mb-4">
-        <Col>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
           <AppBarChart />
-        </Col>
-      </Row>
+        </div>
+      </div>
     </>
   );
 };

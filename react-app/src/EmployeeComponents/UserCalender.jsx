@@ -59,6 +59,7 @@ const UserCalendar = ({ name }) => {
   return (
     <div className="card">
       <Calendar
+        className="calendar"
         value={selectedDate}
         // onChange={handleDateChange}
         tileClassName={({ date, view }) => {

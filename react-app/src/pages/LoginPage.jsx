@@ -30,8 +30,12 @@ function LoginPage() {
         username,
         password,
       });
-
-      if (response.data.access_token) {
+      if (response.data.access_token === null) {
+        setResponseMessage("Invalid username or password");
+        setLoading(false);
+        return;
+      }
+      if (response.data) {
         console.log(response.data);
         setToken(response.data.access_token);
         localStorage.setItem("username", username);
@@ -43,9 +47,11 @@ function LoginPage() {
         navigate("/dashboard");
       } else {
         setResponseMessage("Invalid username or password");
+        setLoading(false);
       }
     } catch (error) {
       console.error(error);
+      setLoading(false);
       setResponseMessage(
         "Sorry, something went wrong. Please try again later."
       );

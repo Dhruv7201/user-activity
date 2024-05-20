@@ -23,10 +23,8 @@ const MostActiveUser = () => {
 
   return (
     <div className="card">
-      <div className="card-header">
-        <h4 className="card-title">Most Active User</h4>
-      </div>
       <div className="card-body tableSize">
+        <h4 className="card-title">Most Active User</h4>
         <table class="table table-hover">
           <thead className="most-prod-head">
             <tr>
@@ -40,7 +38,7 @@ const MostActiveUser = () => {
               <tr>
                 <th scope="row">{index + 1}</th>
                 <td>
-                  <Link to={`/Employee/${userName}`} className="link-style">
+                  <Link to={`/employee/${userName}`} className="link-style">
                     {userName}
                   </Link>
                 </td>

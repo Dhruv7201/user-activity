@@ -59,10 +59,8 @@ const AttendanceBar = () => {
 
   return (
     <div className="card">
-      <div className="card-header">
-        <h4 className="card-title">Present and Absent Users</h4>
-      </div>
       <div className="card-body">
+        <h5 className="card-title">Present and Absent Users</h5>
         <div className="chart">
           <ReactApexChart
             options={options}
@@ -70,16 +68,6 @@ const AttendanceBar = () => {
             type="bar"
             height={350}
           />
-        </div>
-      </div>
-      <div className="card-footer">
-        <div className="d-flex justify-content-between">
-          <div className="stats">
-            <a>Present: {presentData.reduce((acc, value) => acc + value, 0)}</a>
-          </div>
-          <div className="stats">
-            <a>Absent: {absentData.reduce((acc, value) => acc + value, 0)}</a>
-          </div>
         </div>
       </div>
     </div>

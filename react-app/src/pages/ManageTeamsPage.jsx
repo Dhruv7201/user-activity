@@ -76,46 +76,53 @@ const ManageTeamsPage = () => {
       <div class="pagetitle">
         <h1>Manage Teams</h1>
       </div>
-      <Row>
-        <Col xs={2}>
-          <label className="mt-3">Team name:</label>
-        </Col>
-        <Col>
-          <InputGroupText>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Enter team name"
-              aria-label="Enter team name"
-              aria-describedby="basic-addon2"
-              onChange={(e) => setTeamName(e.target.value)}
-              value={newTeam}
-            />
-          </InputGroupText>
-        </Col>
-      </Row>
-      <br />
-      <Button variant="success" onClick={addTeam}>
-        Add Team
-      </Button>
-
-      {teams.length > 0 ? (
-        <ListGroup className="mt-3">
-          {teams.map((team, index) => (
-            <ListGroup.Item
-              key={index}
-              className="d-flex justify-content-between"
-            >
-              {team}
-              <Button variant="danger" onClick={() => deleteTeam(index)}>
-                Delete
+      <div className="card">
+        <div className="card-body pt-4">
+          <Row>
+            <Col xs={2}>
+              <label className="mt-2">Team name:</label>
+            </Col>
+            <Col>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Enter team name"
+                  aria-label="Enter team name"
+                  aria-describedby="basic-addon2"
+                  onChange={(e) => setTeamName(e.target.value)}
+                  value={newTeam}
+                />
+            </Col>
+          </Row>
+          <br />
+          <Row>
+            <Col xs={2}></Col>
+            <Col>
+              <Button variant="primary" onClick={addTeam}>
+                Add Team
               </Button>
-            </ListGroup.Item>
-          ))}
-        </ListGroup>
-      ) : (
-        <p>No teams available. Add a team using the "Add Team" button.</p>
-      )}
+            </Col>
+          </Row>
+
+          {teams.length > 0 ? (
+            <ListGroup className="mt-3">
+              {teams.map((team, index) => (
+                <ListGroup.Item
+                  key={index}
+                  className="d-flex justify-content-between"
+                >
+                  {team}
+                  <Button variant="danger" onClick={() => deleteTeam(index)}>
+                    Delete
+                  </Button>
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+          ) : (
+            <p>No teams available. Add a team using the "Add Team" button.</p>
+          )}
+        </div>
+    </div>
     </>
   );
 };

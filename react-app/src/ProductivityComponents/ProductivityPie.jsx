@@ -45,18 +45,16 @@ const ProductivityPie = () => {
   return (
     <>
       <div className="card">
-        <div className="card-header">
-          <h4 className="card-title">Productivity Hours</h4>
-        </div>
+        
         <div className="card-body">
-          <div
-            className="card-body"
+          <h4 className="card-title">Productivity Hours</h4>
+          <div className="card-body"
             style={{
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
               padding: "20px",
-              height: "300px",
+              height: "560px",
             }}
           >
             <Doughnut data={data} />

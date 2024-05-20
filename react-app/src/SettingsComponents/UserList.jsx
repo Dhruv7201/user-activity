@@ -95,9 +95,12 @@ const UserList = () => {
   ];
 
   return (
-    <div>
+    
+    <div className="mb-5">
+    <div className="card mb-4">
+    <div className="card-body pt-4">
       <div className="search-bar">
-        <div className="row">
+        <div className="row mb-2">
           <div className="col">
             <Form.Control
               type="text"
@@ -108,7 +111,7 @@ const UserList = () => {
           </div>
           <div className="col">
             <Button
-              variant="danger btn-sm"
+              variant="primary"
               onClick={() => setSearchTerm("")}
               disabled={!searchTerm}
             >
@@ -117,6 +120,8 @@ const UserList = () => {
           </div>
         </div>
       </div>
+      </div>
+    </div>
       <DataTable
         title="User List"
         columns={columns}
@@ -128,6 +133,7 @@ const UserList = () => {
         paginationServer
       />
     </div>
+    
   );
 };
 

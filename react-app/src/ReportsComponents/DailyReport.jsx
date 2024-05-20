@@ -10,6 +10,10 @@ const DailyReport = () => {
   const { dateYmd } = useDateContext();
 
   useEffect(() => {
+    console.log(dateYmd);
+    if (!dateYmd) {
+      return;
+    }
     get(
       "dailyreport/?date=" +
         dateYmd +
@@ -26,45 +30,46 @@ const DailyReport = () => {
   return (
     <>
       <div class="pagetitle">
-        <h1>Daily Reports</h1>
+        <h1>Reports</h1>
       </div>
       <DateSelector />
-      <div class="card">
-        <div
-          className="card-body"
-          style={{ overflowY: "auto", maxHeight: "400px" }}
-        >
-          <Table className="table table-hover">
-            <thead>
-              <tr>
-                <th>Employee Name</th>
-                <th>Arrival</th>
-                <th>Working Time</th>
-                <th>Productive Time</th>
-                <th>Idle Time</th>
-                <th>Total Time</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((item, index) => (
-                <tr key={index}>
-                  <td>
-                    <Link
-                      to={`/employee/${item["Employee Name"]}`}
-                      className="link-style"
-                    >
-                      {item["Employee Name"]}
-                    </Link>
-                  </td>
-                  <td>{item.Arrival}</td>
-                  <td>{item["Working Time"]}</td>
-                  <td>{item["Productive Time"]}</td>
-                  <td>{item["Idle Time"]}</td>
-                  <td>{item["Total Time"]}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-body">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Employee Name</th>
+                    <th>Arrival</th>
+                    <th>Working Time</th>
+                    <th>Productive Time</th>
+                    <th>Idle Time</th>
+                    <th>Total Time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.map((item, index) => (
+                    <tr key={index}>
+                      <td>
+                        <Link
+                          to={`/employee/${item["Employee Name"]}`}
+                          className="link-style"
+                        >
+                          {item["Employee Name"]}
+                        </Link>
+                      </td>
+                      <td>{item.Arrival}</td>
+                      <td>{item["Working Time"]}</td>
+                      <td>{item["Productive Time"]}</td>
+                      <td>{item["Idle Time"]}</td>
+                      <td>{item["Total Time"]}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </>

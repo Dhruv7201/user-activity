@@ -12,11 +12,25 @@
   font-size: 16px; /* Add this line to control the font size */
 }
 
+.present-date:hover {
+  background-color: #4caf50 !important;
+  color: white !important;
+  font-weight: bold !important;
+  font-size: 16px !important;
+}
+
 .absent-date {
   background-color: #ff5722; /* Red */
   color: white;
   font-weight: bold; /* Add this line to make the font weight bold */
   font-size: 16px; /* Add this line to control the font size */
+}
+
+.absent-date:hover {
+  background-color: #ff5722 !important;
+  color: white !important;
+  font-weight: bold !important;
+  font-size: 16px !important;
 }
 
 .selected-date {
@@ -30,4 +44,23 @@
 .react-calendar__tile:hover {
   background-color: transparent !important;
   color: inherit !important;
+  cursor: default !important;
+}
+
+.react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none;
+  cursor: default;
+}
+
+.react-calendar__navigation {
+  display: none;
+}
+
+.react-calendar {
+  width: 100% !important;
+  max-width: 100% !important;
+  line-height: 4.6 !important;
+  background: #fff !important;
+  border: 1px solid #ebeef4 !important;
+  border-radius: 5px !important;
 }

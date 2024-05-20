@@ -21,16 +21,16 @@ const Productivity = ({ url, title }) => {
 
   return (
     <>
-      <Card>
-        <Card.Body>
-          <Card.Title>{title}</Card.Title>
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{title}</h5>
           <div className="card-productivity">
-            <Card.Text>
+            <p>
               {title === "Productivity" ? `${productivity}%` : productivity}
-            </Card.Text>
+            </p>
           </div>
-        </Card.Body>
-      </Card>
+        </div>
+      </div>
     </>
   );
 };
