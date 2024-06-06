@@ -11,8 +11,8 @@ from jose import jwt
 
 api_readfile = APIRouter()
 
-access_key = 'IEWC51DQAPVJ489HHOGC'
-secret_key = '7WH5WYAW5OAC4NYX6G0LVBGG8NCOTQX9IBTGVLY2'
+access_key = 'ACCESS_KEY'
+secret_key = 'SECRET_KEY'
 minio_host = "objectstore.e2enetworks.net"
 minio_bucket = "test-db"
 SECRET_KEY = "FastAPI-reactJS"
