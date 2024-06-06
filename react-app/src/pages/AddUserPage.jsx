@@ -47,12 +47,11 @@ const AddUserPage = () => {
         password,
         selectedTeams,
       });
-      console.log(response);
+
       setAlertType("success");
       setErrorMessage("User Added Successfully");
       navigate(window.history.back());
     } catch (error) {
-      console.error(error);
       setAlertType("danger");
       setErrorMessage(`Error adding user: ${error.message}`);
       setShowErrorAlert(true);
@@ -64,9 +63,7 @@ const AddUserPage = () => {
       try {
         const response = await get("/teams");
         setTeams(response.data.teams);
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (error) {}
     };
     getTeams();
   }, []);
@@ -77,118 +74,122 @@ const AddUserPage = () => {
         <h1>Add User</h1>
       </div>
       <div className="card">
-            <div className="card-body pt-4">
-      <Form
-        onSubmit={(e) => {
-          e.preventDefault();
-        }}
-      >
-      <div className="row mb-4">
-        <div className="col-md-4 mb-3">
-          <Form.Label>User Name</Form.Label>
-          <Form.Control
-            onChange={(e) => {
-              setUsername(e.target.value);
-            }}
-            id="username"
-            type="text"
-            placeholder="Enter User Name"
-          />
-        </div>
-        <div className="col-md-4 mb-3">
-          <Form.Label>User Password</Form.Label>
-          <div className="input-group display-flex justify-content-between">
-            <Form.Control
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-              id="password"
-              type={passwordType}
-              placeholder="Enter User Password"
-            />
-            <Button
-              variant="outline-secondary"
-              onClick={() => {
-                setPasswordType((prev) =>
-                  prev === "password" ? "text" : "password"
-                );
-                setShowPassword((prev) => (prev === "Show" ? "Hide" : "Show"));
-              }}
-            >
-              {showPassword}
-            </Button>
-          </div>
-        </div>
-        <div className="col-md-4 mb-3">
-          <Form.Label>Confirm Password</Form.Label>
-          <div className="input-group display-flex justify-content-between">
-            <Form.Control
-              onChange={(e) => {
-                setConfirmPassword(e.target.value);
-              }}
-              id="confirmPassword"
-              type={confirmPasswordType}
-              placeholder="Confirm Password"
-            />
-            <Button
-              variant="outline-secondary max-width-10"
-              onClick={() => {
-                setConfirmPasswordType((prev) =>
-                  prev === "password" ? "text" : "password"
-                );
-                setShowConfirmPassword((prev) =>
-                  prev === "Show" ? "Hide" : "Show"
-                );
-              }}
-            >
-              {showConfirmPassword}
-            </Button>
-          </div>
-        </div>
-        </div>
-        <div className="row mb-3">
-          <div className="mb-3">
-            <Form.Label>Select Teams</Form.Label>
-            <div className="select-options">
-            {teams.map((team) => (
-              <Form.Check
-                key={team}
-                type="checkbox"
-                id={`team-${team}`}
-                label={team}
-                checked={selectedTeams.includes(team)}
-                onChange={() => {
-                  setSelectedTeams((prevTeams) => {
-                    if (prevTeams.includes(team)) {
-                      // Team is already selected, remove it
-                      return prevTeams.filter(
-                        (selectedTeam) => selectedTeam !== team
-                      );
-                    } else {
-                      // Team is not selected, add it
-                      return [...prevTeams, team];
-                    }
-                  });
-                }}
-              />
-            ))}
-            </div>
-          </div>
-        </div>
-        {showErrorAlert && <Alert variant={alertType}>{errorMessage}</Alert>}
-        <div className="mb-3">
-          <Button
-            variant="primary"
-            type="submit"
-            onClick={() => {
-              addUser();
+        <div className="card-body pt-4">
+          <Form
+            onSubmit={(e) => {
+              e.preventDefault();
             }}
           >
-            Submit
-          </Button>
+            <div className="row mb-4">
+              <div className="col-md-4 mb-3">
+                <Form.Label>User Name</Form.Label>
+                <Form.Control
+                  onChange={(e) => {
+                    setUsername(e.target.value);
+                  }}
+                  id="username"
+                  type="text"
+                  placeholder="Enter User Name"
+                />
+              </div>
+              <div className="col-md-4 mb-3">
+                <Form.Label>User Password</Form.Label>
+                <div className="input-group display-flex justify-content-between">
+                  <Form.Control
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                    }}
+                    id="password"
+                    type={passwordType}
+                    placeholder="Enter User Password"
+                  />
+                  <Button
+                    variant="outline-secondary"
+                    onClick={() => {
+                      setPasswordType((prev) =>
+                        prev === "password" ? "text" : "password"
+                      );
+                      setShowPassword((prev) =>
+                        prev === "Show" ? "Hide" : "Show"
+                      );
+                    }}
+                  >
+                    {showPassword}
+                  </Button>
+                </div>
+              </div>
+              <div className="col-md-4 mb-3">
+                <Form.Label>Confirm Password</Form.Label>
+                <div className="input-group display-flex justify-content-between">
+                  <Form.Control
+                    onChange={(e) => {
+                      setConfirmPassword(e.target.value);
+                    }}
+                    id="confirmPassword"
+                    type={confirmPasswordType}
+                    placeholder="Confirm Password"
+                  />
+                  <Button
+                    variant="outline-secondary max-width-10"
+                    onClick={() => {
+                      setConfirmPasswordType((prev) =>
+                        prev === "password" ? "text" : "password"
+                      );
+                      setShowConfirmPassword((prev) =>
+                        prev === "Show" ? "Hide" : "Show"
+                      );
+                    }}
+                  >
+                    {showConfirmPassword}
+                  </Button>
+                </div>
+              </div>
+            </div>
+            <div className="row mb-3">
+              <div className="mb-3">
+                <Form.Label>Select Teams</Form.Label>
+                <div className="select-options">
+                  {teams.map((team) => (
+                    <Form.Check
+                      key={team}
+                      type="checkbox"
+                      id={`team-${team}`}
+                      label={team}
+                      checked={selectedTeams.includes(team)}
+                      onChange={() => {
+                        setSelectedTeams((prevTeams) => {
+                          if (prevTeams.includes(team)) {
+                            // Team is already selected, remove it
+                            return prevTeams.filter(
+                              (selectedTeam) => selectedTeam !== team
+                            );
+                          } else {
+                            // Team is not selected, add it
+                            return [...prevTeams, team];
+                          }
+                        });
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+            {showErrorAlert && (
+              <Alert variant={alertType}>{errorMessage}</Alert>
+            )}
+            <div className="mb-3">
+              <Button
+                variant="primary"
+                type="submit"
+                onClick={() => {
+                  addUser();
+                }}
+              >
+                Submit
+              </Button>
+            </div>
+          </Form>
         </div>
-      </Form>
-      </div>
       </div>
     </>
   );

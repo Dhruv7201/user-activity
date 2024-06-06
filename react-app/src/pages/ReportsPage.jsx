@@ -18,7 +18,6 @@ const ReportsPage = () => {
     const tokenValid = isTokenValid();
 
     if (!tokenValid) {
-      console.log("Token is not valid. Redirect to login.");
       removeToken();
       navigate("/", {
         state: { error: "Session expired. Please log in again." },

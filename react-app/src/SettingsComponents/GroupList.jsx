@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Card, ListGroup, Button, Collapse } from 'react-bootstrap';
-import { get, del } from '../api/api';
+import React, { useEffect, useState } from "react";
+import { Card, ListGroup, Button, Collapse } from "react-bootstrap";
+import { get, del } from "../api/api";
 
 function ListOfGroup() {
   const [groups, setGroups] = useState([]);
@@ -9,11 +9,9 @@ function ListOfGroup() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await get('/groupList');
+        const response = await get("/groupList");
         setGroups(response.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
+      } catch (error) {}
     }
 
     fetchData();
@@ -24,14 +22,11 @@ function ListOfGroup() {
       const groupNameToDelete = event.target.value;
       // Delete the group with the given name
       await del(`/deleteGroup?nameGroup=${groupNameToDelete}`);
-      console.log('Group deleted:', groupNameToDelete);
 
       // Update the list of groups after deletion
-      const response = await get('/groupList');
+      const response = await get("/groupList");
       setGroups(response.data);
-    } catch (error) {
-      console.error('Error deleting group:', error);
-    }
+    } catch (error) {}
   };
 
   const toggleCollapse = () => {
@@ -41,23 +36,30 @@ function ListOfGroup() {
   return (
     <>
       <Card>
-        <Card.Header className='show-list'
+        <Card.Header
+          className="show-list"
           onClick={toggleCollapse}
           style={{
-            cursor: 'pointer',
-            transition: 'background-color 0.3s ease-in-out',
-            backgroundColor: collapseOpen ? '#f6f9ff' : '#fff',
-            color: '#012970',
+            cursor: "pointer",
+            transition: "background-color 0.3s ease-in-out",
+            backgroundColor: collapseOpen ? "#f6f9ff" : "#fff",
+            color: "#012970",
           }}
         >
-          {collapseOpen ? 'Hide Group List' : 'Show Group List'}
+          {collapseOpen ? "Hide Group List" : "Show Group List"}
         </Card.Header>
 
-        <Collapse in={collapseOpen} style={{ transition: 'height 0.3s ease-in-out' }}>
+        <Collapse
+          in={collapseOpen}
+          style={{ transition: "height 0.3s ease-in-out" }}
+        >
           <Card.Body>
-            <ListGroup className='listgroup'>
+            <ListGroup className="listgroup">
               {groups.map((group, index) => (
-                <ListGroup.Item key={index} className="d-flex justify-content-between">
+                <ListGroup.Item
+                  key={index}
+                  className="d-flex justify-content-between"
+                >
                   <div>
                     <div>
                       <strong>Name:</strong> {group.nameGroup}

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { get, post } from '../api/api';
-import { Button, Col, Form, Row } from 'react-bootstrap';
-import Select from 'react-select';
+import React, { useState, useEffect } from "react";
+import { get, post } from "../api/api";
+import { Button, Col, Form, Row } from "react-bootstrap";
+import Select from "react-select";
 
 const AddUser = ({ onAddUser, userListKey }) => {
   const [users, setUsers] = useState([]);
@@ -10,12 +10,13 @@ const AddUser = ({ onAddUser, userListKey }) => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await get('/user_list');
-        const modifiedUsers = response.data.map((user) => ({ value: user, label: user }));
+        const response = await get("/user_list");
+        const modifiedUsers = response.data.map((user) => ({
+          value: user,
+          label: user,
+        }));
         setUsers(modifiedUsers);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
+      } catch (error) {}
     }
 
     fetchData();
@@ -30,14 +31,15 @@ const AddUser = ({ onAddUser, userListKey }) => {
       const response = await post(`users/${selectedOption.value}`);
       onAddUser(selectedOption.value);
       // Assuming the response contains the updated user list data
-      const updatedUsers = response.data.map((user) => ({ value: user, label: user }));
-      console.log(updatedUsers);
+      const updatedUsers = response.data.map((user) => ({
+        value: user,
+        label: user,
+      }));
+
       setUsers(updatedUsers);
       // Reset the selected option to null
       setSelectedOption(null);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   return (
@@ -56,7 +58,12 @@ const AddUser = ({ onAddUser, userListKey }) => {
               placeholder="Select User"
             />
           </Form.Group>
-          <Button variant="primary" type="submit" className="mt-4" onClick={handleSubmit}>
+          <Button
+            variant="primary"
+            type="submit"
+            className="mt-4"
+            onClick={handleSubmit}
+          >
             Add User
           </Button>
         </Col>

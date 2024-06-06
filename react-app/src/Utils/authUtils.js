@@ -26,7 +26,6 @@ export const isTokenValid = () => {
     const currentTime = Date.now() / 1000;
     return decoded.exp > currentTime;
   } catch (error) {
-    console.error("Error decoding token:", error);
     return false;
   }
 };
@@ -41,7 +40,6 @@ export const getUsernameFromToken = () => {
     const decoded = jwtDecode(token);
     return decoded.sub; // Assuming 'sub' is the key containing the username
   } catch (error) {
-    console.error("Error decoding token:", error);
     return null;
   }
 };
@@ -55,7 +53,6 @@ export const checkValidToken = () => {
   const navigate = useNavigate();
 
   if (!tokenValid) {
-    console.log("Token is not valid. Redirect to login.");
     removeToken();
     return false;
   }

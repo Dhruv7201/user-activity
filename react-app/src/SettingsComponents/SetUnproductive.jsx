@@ -28,9 +28,7 @@ function AddToGroup({ onAppAdd }) {
       const applications = response.data;
       const valuesLabels = mapValuesLabels(applications);
       setOptions(valuesLabels);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   const mapValuesLabels = (applications) => {
@@ -59,9 +57,7 @@ function AddToGroup({ onAppAdd }) {
 
       // Call the parent component's callback to refresh the group list
       onAppAdd();
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   const handleSuggestionsChange = (selectedOption) => {
@@ -79,83 +75,83 @@ function AddToGroup({ onAppAdd }) {
 
   return (
     <>
-    <div className="card">
-            <div className="card-body pt-4">
-      <Row className="mt-4">
-        <Col md={12}>
-          <Form.Group>
-            <Form.Label>Application Name:</Form.Label>
-            <Select
-              value={selectedOption}
-              onChange={setSelectedOption}
-              options={options}
-              isClearable={true}
-              isSearchable={true}
-              placeholder="Select or type..."
-            />
-          </Form.Group>
-        </Col>
-      </Row>
-      {suggestions.length > 0 && (
-        <Row className="mt-4">
-          <Col md={6}>
-            <Form.Group>
-              <Form.Label>Key Word:</Form.Label>
-              <Select
-                value={selectSuggestions}
-                onChange={handleSuggestionsChange}
-                options={suggestions.map((suggestion, index) => ({
-                  value: suggestion,
-                  label: suggestion,
-                }))}
-                isClearable={true}
-                isSearchable={true}
-                placeholder="Select or type..."
-              />
-            </Form.Group>
-          </Col>
-          {selectSuggestions && (
-            <Col md={6}>
+      <div className="card">
+        <div className="card-body pt-4">
+          <Row className="mt-4">
+            <Col md={12}>
               <Form.Group>
-                <Form.Label>Name Group:</Form.Label>
-                <div className="input-group">
-                  <Form.Control
-                    type="text"
-                    placeholder="Name Group"
-                    value={appName}
-                    onChange={(event) => setAppName(event.target.value)}
-                  />
-                  {appName && (
-                    <div className="input-group-append">
-                      <button
-                        className="btn btn-outline-secondary"
-                        type="button"
-                        onClick={() => setAppName("")}
-                      >
-                        Clear
-                      </button>
-                    </div>
-                  )}
-                </div>
+                <Form.Label>Application Name:</Form.Label>
+                <Select
+                  value={selectedOption}
+                  onChange={setSelectedOption}
+                  options={options}
+                  isClearable={true}
+                  isSearchable={true}
+                  placeholder="Select or type..."
+                />
               </Form.Group>
             </Col>
+          </Row>
+          {suggestions.length > 0 && (
+            <Row className="mt-4">
+              <Col md={6}>
+                <Form.Group>
+                  <Form.Label>Key Word:</Form.Label>
+                  <Select
+                    value={selectSuggestions}
+                    onChange={handleSuggestionsChange}
+                    options={suggestions.map((suggestion, index) => ({
+                      value: suggestion,
+                      label: suggestion,
+                    }))}
+                    isClearable={true}
+                    isSearchable={true}
+                    placeholder="Select or type..."
+                  />
+                </Form.Group>
+              </Col>
+              {selectSuggestions && (
+                <Col md={6}>
+                  <Form.Group>
+                    <Form.Label>Name Group:</Form.Label>
+                    <div className="input-group">
+                      <Form.Control
+                        type="text"
+                        placeholder="Name Group"
+                        value={appName}
+                        onChange={(event) => setAppName(event.target.value)}
+                      />
+                      {appName && (
+                        <div className="input-group-append">
+                          <button
+                            className="btn btn-outline-secondary"
+                            type="button"
+                            onClick={() => setAppName("")}
+                          >
+                            Clear
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </Form.Group>
+                </Col>
+              )}
+            </Row>
           )}
-        </Row>
-      )}
-      <Row className="mt-4">
-        <Col>
-          <Button
-            variant="primary"
-            type="submit"
-            className="mr-3"
-            onClick={handleSubmit}
-            disabled={!selectSuggestions}
-          >
-            Submit
-          </Button>
-        </Col>
-      </Row>
-      </div>
+          <Row className="mt-4">
+            <Col>
+              <Button
+                variant="primary"
+                type="submit"
+                className="mr-3"
+                onClick={handleSubmit}
+                disabled={!selectSuggestions}
+              >
+                Submit
+              </Button>
+            </Col>
+          </Row>
+        </div>
       </div>
     </>
   );

@@ -70,9 +70,7 @@ const EmployeeDetailsData = () => {
         });
 
         setGroups(groupedData);
-      } catch (error) {
-        console.error("Error fetching data: ", error);
-      }
+      } catch (error) {}
     };
 
     fetchData();

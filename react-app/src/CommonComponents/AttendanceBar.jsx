@@ -18,9 +18,7 @@ const AttendanceBar = () => {
         setChartData(response.data.data);
         setMax(response.data.max);
       })
-      .catch((error) => {
-        console.log("Error fetching data:", error);
-      });
+      .catch((error) => {});
   }, [fromDateYmd, toDateYmd]);
 
   const labels = Object.keys(chartData);

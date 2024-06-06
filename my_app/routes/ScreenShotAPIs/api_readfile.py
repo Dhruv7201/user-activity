@@ -1,18 +1,22 @@
 from fastapi import APIRouter, Request, Query, Header
-from fastapi.responses import JSONResponse, FileResponse
+from fastapi.responses import JSONResponse, RedirectResponse, StreamingResponse
 from methods.db_method import db_connection
 import os
-import time
-import shutil
 from minio import Minio
+from io import BytesIO
+from datetime import datetime
+from jose import jwt
+
+
 
 api_readfile = APIRouter()
 
-folder_path = "ss"
 access_key = 'IEWC51DQAPVJ489HHOGC'
 secret_key = '7WH5WYAW5OAC4NYX6G0LVBGG8NCOTQX9IBTGVLY2'
 minio_host = "objectstore.e2enetworks.net"
 minio_bucket = "test-db"
+SECRET_KEY = "FastAPI-reactJS"
+ALGORITHM = "HS256"
 
 client = Minio(
     minio_host,
@@ -37,7 +41,8 @@ async def list_files(request: Request, date: str = Query(None), teamname: str = 
             objects = client.list_objects(minio_bucket, prefix=f"ss/{date}/", recursive=True)
             for obj in objects:
                 if obj.object_name.split("/")[2] in user_list:
-                    files_list.append(obj.object_name)
+                    if not obj.object_name.endswith("_thumbnail.png"):
+                        files_list.append(obj.object_name)
         except Exception as e:
             return JSONResponse(status_code=400, content={"error": str(e)})
 
@@ -62,23 +67,54 @@ async def list_files(request: Request, date: str = Query(None), teamname: str = 
         return JSONResponse(status_code=400, content={"error": "Date parameter is required"})
 
 
-@api_readfile.get("/download_file/{date}/{user}/{file_name}", tags=["ScreenShotPage"])
-async def download_file(request: Request, date: str, user: str, file_name: str):
+
+@api_readfile.get("/thumbnail_file/{date}/{user}/{file_name}/{token}", tags=["ScreenShotPage"])
+async def thumbnail_file(request: Request, date: str, user: str, file_name: str, token: str):
     try:
-        file_path = f"{folder_path}/{date}/{user}/{file_name}"
 
-        # delete all folder other than current date
-        if os.path.exists(folder_path):
-            for folder in os.listdir(f'{folder_path}/'):
-                if folder != date:
-                    shutil.rmtree(f"{folder_path}/{folder}")
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+            exp = payload.get("exp")
+            if exp < datetime.utcnow().timestamp():
+                return JSONResponse(status_code=401, content={"error": "Token expired"})
+        except Exception as e:
+            return JSONResponse(status_code=401, content={"error": "Invalid token"})
 
-        # create folder if not exists
-        if not os.path.exists(f"{folder_path}/{date}/{user}"):
-            os.makedirs(f"{folder_path}/{date}/{user}")
+        thumbnail_file_name = file_name.split(".")[0] + "_thumbnail.png"
+        object_path = f"ss/{date}/{user}/{thumbnail_file_name}"
 
-        client.fget_object(minio_bucket, f"{folder_path}/{date}/{user}/{file_name}", file_path)
+        # Check if thumbnail exists in bucket
+        objects = client.list_objects(minio_bucket, f"ss/{date}/{user}/", recursive=True)
+        if thumbnail_file_name not in [obj.object_name.split("/")[-1] for obj in objects]:
+            # Redirect to download file if thumbnail does not exist
+            return RedirectResponse(url=f"/api/download_file/{date}/{user}/{file_name}")
 
-        return FileResponse(file_path)
+        response = client.get_object(minio_bucket, object_path)
+        buffer = BytesIO(response.read())
+        buffer.seek(0)
+
+        return StreamingResponse(buffer, media_type="image/png")
+    except Exception as e:
+        print(str(e))
+        return JSONResponse(status_code=400, content={"error": str(e)})
+    
+
+
+@api_readfile.get("/download_file/{date}/{user}/{file_name}/{token}", tags=["ScreenShotPage"])
+async def download_file(request: Request, date: str, user: str, file_name: str, token: str):
+    try:
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+            exp = payload.get("exp")
+            if exp < datetime.utcnow().timestamp():
+                return JSONResponse(status_code=401, content={"error": "Token expired"})
+        except Exception as e:
+            return JSONResponse(status_code=401, content={"error": "Invalid token"})
+
+        response = client.get_object(minio_bucket, f"ss/{date}/{user}/{file_name}")
+        buffer = BytesIO(response.read())
+        buffer.seek(0)
+        
+        return StreamingResponse(buffer, media_type="image/png")
     except Exception as e:
         return JSONResponse(status_code=400, content={"error": str(e)})

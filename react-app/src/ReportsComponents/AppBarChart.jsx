@@ -17,9 +17,7 @@ const AppBarChart = () => {
       .then((response) => {
         setChartData(response.data.top_seven_group);
       })
-      .catch((error) => {
-        console.log("Error fetching data:", error);
-      });
+      .catch((error) => {});
   }, [fromDateYmd, toDateYmd]);
 
   const colors = [

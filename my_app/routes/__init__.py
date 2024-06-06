@@ -20,7 +20,7 @@ from .SettingsAPIs.api_teams import api_teams
 from .ReportPageAPIs.api_dailyreport import api_dailyreport
 from .ReportPageAPIs.api_monthlyreport import api_monthlyreport
 from .ReportPageAPIs.api_appBar import api_appBar
-from .ExeConfig.api_threshold import api_threshold
+from .ExeConfig.config import api_config
 
 
 def register_api(app):
@@ -46,4 +46,4 @@ def register_api(app):
     app.include_router(api_monthlyreport, prefix="/api")
     app.include_router(api_appBar, prefix="/api")
     app.include_router(api_teams, prefix="/api")
-    app.include_router(api_threshold, prefix="/api")
+    app.include_router(api_config, prefix="/api")

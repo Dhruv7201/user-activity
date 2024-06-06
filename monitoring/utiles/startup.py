@@ -34,6 +34,7 @@ def copy_exe_to_user_folder():
 
 def create_shortcut(target_path, shortcut_name, description="Shortcut to My App"):
     try:
+        
         print("Creating shortcut...")
         shell = win32com.client.Dispatch("WScript.Shell")
         

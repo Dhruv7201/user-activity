@@ -16,9 +16,7 @@ const MostProductiveUser = () => {
       .then((res) => {
         setUsers(res.data.user_rankings);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, [fromDateYmd, toDateYmd]);
 
   return (

@@ -7,6 +7,7 @@ import { setToken } from "../Utils/authUtils.js";
 function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [responseMessage, setResponseMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -36,7 +37,6 @@ function LoginPage() {
         return;
       }
       if (response.data) {
-        console.log(response.data);
         setToken(response.data.access_token);
         localStorage.setItem("username", username);
         localStorage.setItem("teamname", response.data.teamname);
@@ -50,7 +50,6 @@ function LoginPage() {
         setLoading(false);
       }
     } catch (error) {
-      console.error(error);
       setLoading(false);
       setResponseMessage(
         "Sorry, something went wrong. Please try again later."
@@ -98,19 +97,33 @@ function LoginPage() {
                   <label htmlFor="password" className="form-label">
                     Password
                   </label>
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    className="form-control"
-                    placeholder="Password"
-                    required
-                    value={password}
-                    onChange={handlePasswordChange}
-                  />
+                  <div className="input-group">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      id="password"
+                      name="password"
+                      className="form-control no-select"
+                      placeholder="Password"
+                      required
+                      value={password}
+                      onChange={handlePasswordChange}
+                      onCopy={(e) => e.preventDefault()}
+                    />
+                    <i
+                      className={`input-group-text passwordButton bi user-select-none
+                      ${showPassword ? "bi-eye-slash" : "bi-eye"}`}
+                      onClick={() => setShowPassword(!showPassword)}
+                    ></i>
+                  </div>
                 </div>
                 <div className="d-flex align-items-center justify-content-between mt-4 mb-0">
-                  <button type="submit" className="btn btn-primary">
+                  <button
+                    type="submit"
+                    className={`btn btn-primary ${
+                      loading ? "disabled-button" : ""
+                    }`}
+                    disabled={loading}
+                  >
                     {loading ? "Loading..." : "Login"}
                   </button>
                 </div>

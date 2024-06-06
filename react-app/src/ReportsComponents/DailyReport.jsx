@@ -10,7 +10,6 @@ const DailyReport = () => {
   const { dateYmd } = useDateContext();
 
   useEffect(() => {
-    console.log(dateYmd);
     if (!dateYmd) {
       return;
     }
@@ -23,9 +22,7 @@ const DailyReport = () => {
       .then((res) => {
         setData(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, [dateYmd]);
   return (
     <>

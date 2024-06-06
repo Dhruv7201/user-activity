@@ -23,6 +23,7 @@ def get_uid():
 def generate_uid():
     # get username from os
     uid = os.getlogin()
+    uid = uid.replace('_', '.')
     # write to file
     with open(uuid_file, 'w') as f:
         f.write(uid)

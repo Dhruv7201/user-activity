@@ -23,9 +23,7 @@ const UserPie = ({ name }) => {
       ).length;
 
       setChartData({ present: presentCount, absent: absentCount });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {

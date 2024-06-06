@@ -6,9 +6,8 @@ import pyautogui
 from datetime import datetime, timedelta
 from pynput import mouse, keyboard
 from utiles.u_id import get_uid
-from utiles.utiles import write_in_rabbitMQ, upload_ss_to_server, read_log_file
+from utiles.utiles import write_in_rabbitMQ, upload_ss_to_server, read_log_file, delete_old_logs
 from utiles.startup import startup_config
-from utiles.cleanup import clean_up
 import requests
 
 
@@ -17,43 +16,65 @@ user_name = directory.split("\\")[-1]
 directory = os.path.join(directory, 'activity')
 if not os.path.exists(directory):
     os.makedirs(directory)
-user_name = 'dhruv'
 ss_dir = directory + '\ss'
 running = True
 last_mouse_activity = time.time()
 last_keyboard_activity = time.time()
 today = datetime.now().strftime("%Y-%m-%d")
-api_url = "https://api.useractivity.ethicstechnology.net/api/"
-api_url = "http://192.168.0.133:5001/api/"
-# screen_shot_interval = int(requests.get(f'{api_url}screen_shot_interval/{user_name}/').json()['screen_shot_interval'])
-# ideal_time_threshold = int(requests.get(f'{api_url}ideal_time_threshold/{user_name}/').json()['ideal_time_threshold'])
-screen_shot_interval = 3600
-ideal_time_threshold = 10
-print("Screen shot interval: ", screen_shot_interval)
-print("Ideal time threshold: ", ideal_time_threshold)
+api_url = "https://api.useractivity.ethicstechnology.net/api"
+# api_url = "http://192.168.0.156:5001/api"
+response = requests.get(f'{api_url}/exe_config/').json()
+
+if 'status' not in response:
+    screen_shot_interval = int(300)
+    ideal_time_threshold = int(10)
+    start_working_hour = int(9)
+    end_working_hour = int(21)
+    working_days = int(5)
+else:
+    if response['status'] == "success":
+        screen_shot_interval = int(response['screen_shot_interval'])
+        ideal_time_threshold = int(response['ideal_time_threshold'])
+        start_working_hour = int(response['start_working_hour'])
+        end_working_hour = int(response['end_working_hour'])
+        working_days = int(response['working_days'])
+    else:
+        screen_shot_interval = int(300)
+        ideal_time_threshold = int(10)
+        start_working_hour = int(9)
+        end_working_hour = int(21)
+        working_days = int(5)
+
+
 
 
 def take_screen_shot():
     while True:
-        if datetime.now().hour < 9 or datetime.now().hour > 21:
-            continue
-        print("Taking screenshot...")
-        screenshot = pyautogui.screenshot()
-        user = get_uid()
-        date_time = user + "_" + datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
-        if os.path.exists(ss_dir):
-            print("Directory exists")
-            print(date_time)
-            file_name = f"{ss_dir}/{date_time}.png"
-        else:
-            os.makedirs(ss_dir, exist_ok=True)
-            file_name = f"{ss_dir}/{date_time}.png"
+        try:
+            # check for working days
+            if datetime.now().weekday() + 1 > working_days:
+                continue
+            if datetime.now().hour < start_working_hour or datetime.now().hour > end_working_hour:
+                continue
+            print("Taking screenshot...")
+            screenshot = pyautogui.screenshot()
+            user = get_uid()
+            date_time = user + "_" + datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+            if os.path.exists(ss_dir):
+                print("Directory exists")
+                print(date_time)
+                file_name = f"{ss_dir}/{date_time}.png"
+            else:
+                os.makedirs(ss_dir, exist_ok=True)
+                file_name = f"{ss_dir}/{date_time}.png"
 
-        screenshot.save(file_name)
+            screenshot.save(file_name)
 
-        upload_ss_to_server(file_name, date_time)
-        # every 1 hour
-        time.sleep(screen_shot_interval)
+            upload_ss_to_server(file_name, api_url)
+            time.sleep(screen_shot_interval)
+        except Exception as e:
+            print("Error: ", e)
+            
 
 def get_active_window_title():
     global running
@@ -67,7 +88,9 @@ def get_opened_windows():
     global data
     try:
         while True:
-            if datetime.now().hour < 9 or datetime.now().hour > 21:
+            if datetime.now().weekday() + 1 > working_days:
+                continue
+            if datetime.now().hour < start_working_hour or datetime.now().hour > end_working_hour:
                 continue
             time.sleep(1)
             if data:
@@ -95,7 +118,7 @@ def get_opened_windows():
                     else:
                         print("New window found: ", window_title)
                         data["list_of_app"].append({
-                            "window_title": window_title,
+                            "window_title": str(window_title),
                             "start_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                             "used_time": "00:00:00"
                         })
@@ -132,7 +155,9 @@ def detect_inactivity():
     keyboard_listener.start()
     try:
         while True:
-            if datetime.now().hour < 9 or datetime.now().hour > 21:
+            if datetime.now().weekday() + 1 > working_days:
+                continue
+            if datetime.now().hour < start_working_hour or datetime.now().hour > end_working_hour:
                 continue
             current_time = time.time()
             mouse_inactive_time = current_time - last_mouse_activity
@@ -169,6 +194,9 @@ def main():
     
 
 if __name__ == "__main__":
-    clean_up()
+    try:
+        delete_old_logs()
+    except Exception as e:
+        print("Error while deleting old logs: ", e)
     startup_config()
     main()

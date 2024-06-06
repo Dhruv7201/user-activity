@@ -27,9 +27,7 @@ const IdleList = () => {
         );
         setUsers(userList);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   }, [fromDateYmd, toDateYmd]);
 
   return (

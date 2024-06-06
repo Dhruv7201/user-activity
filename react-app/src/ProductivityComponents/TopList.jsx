@@ -29,9 +29,7 @@ const TopList = ({ order, title }) => {
 
         setUserList(sortedUsers);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   }, [fromDateYmd, toDateYmd, order]);
 
   return (

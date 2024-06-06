@@ -1,25 +1,38 @@
 import os
-import minio
 import json
 from datetime import datetime, timedelta
 import pika
 import time
 from .u_id import get_uid
+import requests
 
 directory = os.path.expanduser('~')
 directory = os.path.join(directory, 'activity')
 if not os.path.exists(directory):
     os.makedirs(directory)
-host = '164.52.204.75'
-port = 5672
-virtual_host = '/'
-username = 'valuusragent'
-password = 'Lh85*3q'
-bucket_link = "objectstore.e2enetworks.net"
-bucket_name = 'test-db'
-access_key = 'IEWC51DQAPVJ489HHOGC'
-secret_key = '7WH5WYAW5OAC4NYX6G0LVBGG8NCOTQX9IBTGVLY2'
+api_url = "https://api.useractivity.ethicstechnology.net/api"
+# api_url = "http://192.168.0.156:5001/api"
 
+response = requests.get(f'{api_url}/rabbitmq_config/').json()
+if 'status' not in response:
+    host = str("localhost")
+    port = int(5672)
+    virtual_host = '/'
+    username = None
+    password = None
+else:
+    if response['status'] == "success":
+        host = str(response['rabbitmq_host'])
+        port = int(response['rabbitmq_port'])
+        virtual_host = str(response['rabbitmq_virtual_host'])
+        username = str(response['rabbitmq_username'])
+        password = str(response['rabbitmq_password'])
+    else:
+        host = str("localhost")
+        port = int(5672)
+        virtual_host = '/'
+        username = None
+        password = None
 
 
 class DateTimeEncoder(json.JSONEncoder):
@@ -42,11 +55,12 @@ def write_in_error_log(error_msg, error_log_file):
 def check_internet():
     try:
         connection = pika.BlockingConnection(
-            pika.ConnectionParameters(host=host, port=port, virtual_host=virtual_host, credentials=pika.PlainCredentials(username, password))
+            pika.ConnectionParameters(host=host, port=5672, virtual_host='/', credentials=pika.PlainCredentials(username, password))
         )
         connection.close()
         return True
     except Exception as e:
+        print(f"Error while checking internet: {e}")
         return False
 
 
@@ -99,7 +113,6 @@ def write_in_rabbitMQ(log_msg):
     if flag:
         try:
             channel = rabbitMQ_connection()
-            delete_old_logs()
             if os.path.exists(log_file):
                 with open(log_file, 'r+') as f:
                     file_content = f.read()
@@ -114,8 +127,7 @@ def write_in_rabbitMQ(log_msg):
                         channel.basic_publish(exchange='', routing_key='json_queue', body=json.dumps(log_msg))
                         return log_msg
             else:
-                # If the log file doesn't exist, create an empty log message and send it
-                empty_log_msg = {}  # You can customize this as needed
+                empty_log_msg = {}
                 write_in_log(empty_log_msg, log_file)
                 channel.basic_publish(exchange='', routing_key='json_queue', body=json.dumps(empty_log_msg))
                 return log_msg
@@ -131,53 +143,33 @@ def write_in_rabbitMQ(log_msg):
 
 
 def delete_old_logs():
-    current_date = datetime.now()
-    for i in range(1, 7):
-        target_date = current_date - timedelta(days=i)
-        log_file_to_delete = os.path.join(directory, 'logs', f'log_{target_date.strftime("%Y-%m-%d")}.json')
-        if os.path.exists(log_file_to_delete):
-            channel = rabbitMQ_connection()
-            with open(log_file_to_delete, 'r') as f:
-                file_content = f.read()
-                if len(file_content) > 0:
-                    log_dict = json.loads(file_content)
-                    channel.basic_publish(exchange='', routing_key='json_queue', body=json.dumps(log_dict))
-                    f.close()
-                    time.sleep(1)
-            os.remove(log_file_to_delete)
-            print(f"Deleted log file from {target_date.strftime('%Y-%m-%d')}")
+    today = datetime.now().strftime("%Y-%m-%d")
+    files_to_delete = os.listdir(os.path.join(directory, 'logs'))
+    for file in files_to_delete:
+        # dont delete file with today and yesterday date
+        if file == f'log_{today}.json' or file == f'error_log_{today}.json' or file == f'log_{(datetime.now() - timedelta(1)).strftime("%Y-%m-%d")}.json' or file == f'error_log_{(datetime.now() - timedelta(1)).strftime("%Y-%m-%d")}.json':
+            continue
+        os.remove(os.path.join(directory, 'logs', file))
+
+def upload_ss_to_server(file_name, api_url):
+    error_log_file = os.path.join(directory, 'logs', f'error_log_{datetime.now().strftime("%Y-%m-%d")}.json')
+    try:
+        with open(file_name, 'rb') as f:
+            file = {'file': f}
+            file_path = file_name.split('/')
+            api_url = api_url + '/uploadfile' + '/' + file_path[-1]
+            response = requests.post(f'{api_url}', files=file)
+            if response.status_code == 200:
+                print("Screenshot uploaded successfully")
+            else:
+                print("Failed to upload screenshot")
+                write_in_error_log("Failed to upload screenshot", error_log_file)
 
 
-
-def upload_ss_to_server(file_name, date_time):
-        client = minio.Minio(
-            bucket_link,
-            access_key=access_key,
-            secret_key=secret_key,
-            secure=True,
-        )
-        
-        file_parts = file_name.split("_")
-        user_folder = file_parts[0].split("/")[-1]
-        print(user_folder)
-        date_time_str = file_parts[1].split(".")[0]
-        date_time = datetime.strptime(date_time_str, "%Y-%m-%d-%H-%M-%S")
-        date_file = date_time.strftime("%Y-%m-%d")
-        time_file = date_time.strftime("%H-%M-%S") + file_name[file_name.rfind("."):]
-        full_path = os.path.join(date_file, user_folder, time_file)
-        location = full_path.replace("\\", "/")
-        if date_time.hour >= 22 or date_time.hour < 8:
-            os.remove(file_name)
-        client.fput_object(bucket_name, "ss/" + location, file_name)
-        print(file_name)
-        # check if successfully uploaded
-        if client.bucket_exists(bucket_name):
-            print(f'Screenshot uploaded at {date_time}')
-            # close the file
-            # close file
-        else:
-            print(f'Failed to send screenshot at {date_time}')
-        time.sleep(1)
-        # Delete the saved screenshot file
         os.remove(file_name)
         return True
+    except Exception as e:
+        print(f"Error while uploading screenshot: {e}")
+        write_in_error_log(f"Error while uploading screenshot: {e}", error_log_file)
+        return False
+

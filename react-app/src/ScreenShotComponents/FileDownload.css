@@ -22,19 +22,54 @@
   border-radius: 10px;
 }
 .user-table {
-  border: 1px solid  rgb(158 169 255 / 30%);
+  border: 1px solid rgb(158 169 255 / 30%);
   border-radius: 10px;
   overflow: hidden;
 }
-.user-table .folder-tabs.head{padding: 13px 15px !important; font-size: 18px; font-weight: 500; color: #012970; font-family: "Poppins", sans-serif; border-bottom: 1px solid rgb(158 169 255 / 30%);}
-.user-table .folder-tabs >div{background-color: #fff;} 
-.file-downloader .image-overlay{max-width: 200px; border: 1px solid rgb(158 169 255 / 30%);padding-top: 15px; margin: 0 auto 30px; border-radius: 4px; box-shadow: 0 0 15px rgb(158 169 255 / 33%);}
-.file-downloader .image-overlay p{font-size: 14px; font-weight: 500; color: #012970; font-family: "Poppins", sans-serif; margin: 10px 0px !important;}
-.user-table .user-list .list{ padding: 5px 15px; border-bottom: 1px solid  rgb(158 169 255 / 30%); transition: all .4s ease; font-size: 14px; font-weight: 500; color: #012970; font-family: "Poppins", sans-serif; cursor: pointer;}
-.user-table .user-list .list:last-child{border-bottom: 0px;}
-.user-table .user-list .list:hover, .user-table .user-list .list.active{background:#f6f9ff; color: #4154f1;}
-
-
+.user-table .folder-tabs.head {
+  padding: 13px 15px !important;
+  font-size: 18px;
+  font-weight: 500;
+  color: #012970;
+  font-family: "Poppins", sans-serif;
+  border-bottom: 1px solid rgb(158 169 255 / 30%);
+}
+.user-table .folder-tabs > div {
+  background-color: #fff;
+}
+.file-downloader .image-overlay {
+  max-width: 200px;
+  border: 1px solid rgb(158 169 255 / 30%);
+  padding-top: 15px;
+  margin: 0 auto 30px;
+  border-radius: 4px;
+  box-shadow: 0 0 15px rgb(158 169 255 / 33%);
+}
+.file-downloader .image-overlay p {
+  font-size: 14px;
+  font-weight: 500;
+  color: #012970;
+  font-family: "Poppins", sans-serif;
+  margin: 10px 0px !important;
+}
+.user-table .user-list .list {
+  padding: 5px 15px;
+  border-bottom: 1px solid rgb(158 169 255 / 30%);
+  transition: all 0.4s ease;
+  font-size: 14px;
+  font-weight: 500;
+  color: #012970;
+  font-family: "Poppins", sans-serif;
+  cursor: pointer;
+}
+.user-table .user-list .list:last-child {
+  border-bottom: 0px;
+}
+.user-table .user-list .list:hover,
+.user-table .user-list .list.active {
+  background: #f6f9ff;
+  color: #4154f1;
+}
 
 .user-img {
   width: 44px;
@@ -42,4 +77,49 @@
   border: 1px solid rgb(183 183 183);
   border-radius: 50%;
   margin-right: 15px;
+}
+
+/* CSS */
+.button-18 {
+  background-color: transparent;
+  border: 2px solid #0d6efd;
+  border-radius: 80px;
+  color: #0d6efd;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  min-height: 40px;
+  padding: 0px 20px 0px 20px;
+}
+
+.button-18:hover {
+  background-color: #0d6efd;
+  color: #ffffff;
+}
+
+.button-18:active {
+  background: #0d6efd;
+  color: rgb(255, 255, 255, 0.7);
+}
+
+.imgtab .card {
+  height: calc(50% - 30px);
+}
+.imgtab {
+  height: 385px;
+  overflow-y: auto;
+}
+
+.imgtab::-webkit-scrollbar {
+  width: 10px;
+}
+.imgtab::-webkit-scrollbar-track {
+  background-color: #ebebeb;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+.imgtab::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: #86c7f3;
 }

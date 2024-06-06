@@ -58,6 +58,7 @@ function DateRange() {
                   value={toDate ? toDate.toISOString().split("T")[0] : ""}
                   onChange={(e) => handleToDateChange(new Date(e.target.value))}
                   max={today.toISOString().split("T")[0]}
+                  min={fromDate ? fromDate.toISOString().split("T")[0] : ""}
                 />
               </div>
               <div className="col-lg-1 col-md-2 col-sm-1 col-2">

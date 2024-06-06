@@ -1,0 +1,9 @@
+# Ignore the __pycache__ directory
+__pycache__/
+# Ignore envs
+env/
+venv/
+myenv/
+
+# Ignore the .idea directory (for IDEs like PyCharm)
+.idea/

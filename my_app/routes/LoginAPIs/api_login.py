@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
 from methods.db_method import db_connection, check_admin
 from datetime import datetime, timedelta
-from jose import JWTError, jwt
+from jose import jwt
 
 api_login = APIRouter()
 SECRET_KEY = "FastAPI-reactJS"
@@ -38,4 +38,4 @@ async def login(request_data: dict):
         access_token = create_token(token_data)
         return JSONResponse({'access_token': access_token, 'token_type': 'bearer', 'teamname': auth_result['teamname']})
     else:
-        raise HTTPException(status_code=401, detail='Invalid Username or Password')
+        return JSONResponse({'access_token': None, 'token_type': 'bearer'})

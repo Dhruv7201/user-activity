@@ -18,6 +18,19 @@ body {
   background: #f6f9ff;
   color: #444444;
 }
+body::-webkit-scrollbar {
+  width: 10px;
+}
+body::-webkit-scrollbar-track {
+  background-color: #ebebeb;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+body::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: rgba(0, 143, 251);
+}
 
 a {
   color: #4154f1;
@@ -1185,12 +1198,9 @@ h6 {
 /*--------------------------------------------------------------
 # Error 404
 --------------------------------------------------------------*/
-.error-404 {
-  padding: 30px;
-}
 
 .error-404 h1 {
-  font-size: 180px;
+  font-size: 100px;
   font-weight: 700;
   color: #4154f1;
   margin-bottom: 0;
@@ -1201,7 +1211,7 @@ h6 {
   font-size: 24px;
   font-weight: 700;
   color: #012970;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 }
 
 .error-404 .btn {
@@ -1280,6 +1290,7 @@ table tr td a {
   bottom: 0;
   width: calc(100% - 300px);
   background: #f6f9ff;
+  z-index: 2;
 }
 body.toggle-sidebar #footer {
   width: calc(100% - 0px);
@@ -1292,8 +1303,7 @@ table tbody.most-prod-user tr td ul {
   padding: 0px;
   list-style-type: none;
 }
-table tbody.most-prod-user tr td ul li {
-}
+
 table tbody.most-prod-user tr td {
   font-size: 14px;
   font-weight: 400;
@@ -1348,6 +1358,71 @@ table tbody.most-prod-user tr td {
   display: block;
 }
 
+table ul {
+  padding: 0px;
+  margin: 0px;
+  list-style-type: none;
+}
+.toggle {
+  height: 40px;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid transparent;
+  margin: 0 auto;
+  text-align: left;
+}
+.tableSize tr td {
+  position: relative;
+}
+.toggle li {
+  vertical-align: top;
+  position: relative;
+  padding: 10px 10px 9px 10px;
+  font-size: 14px;
+}
+.toggle li:first-child:before {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border: 1px solid #ccc;
+  right: 14px;
+  top: 12px;
+  transform: rotate(45deg);
+  border-width: 0px 1px 1px 0px;
+}
+.toggle li:first-child:hover:before {
+  border-color: #012970;
+}
+.toggle:hover {
+  cursor: pointer;
+}
+.toggle.open {
+  z-index: 1;
+  height: auto;
+  box-shadow: 0 0 5px rgb(0 0 0 / 21%);
+  max-height: 202px;
+  overflow: auto;
+}
+
+.toggle.open::-webkit-scrollbar {
+  width: 10px;
+}
+.toggle.open::-webkit-scrollbar-track {
+  background-color: #ebebeb;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+.toggle.open::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: #86c7f3;
+}
+
 /* Dhruv added CSS my changes in css        -------------------------------------------------- */
 .nav-link .flex span {
   padding-left: 10px;
@@ -1393,4 +1468,34 @@ table tbody.most-prod-user tr td {
 
 .sidebar-nav .nav-link.collapsed {
   color: #012970;
+}
+.dataTable .rdt_Pagination {
+  font-size: 16px;
+}
+.dataTable .rdt_Table .rdt_TableHead .rdt_TableHeadRow > div {
+  font-size: 16px;
+  color: #000;
+  font-weight: 700;
+  padding: 0.5rem 0.5rem;
+}
+.dataTable .rdt_Table .rdt_TableBody .rdt_TableRow > div {
+  font-size: 16px;
+  color: #000;
+  padding: 0.5rem 0.5rem;
+}
+.dataTable .rdt_Table .rdt_TableBody .rdt_TableRow > div:first-child {
+  font-weight: 700;
+}
+.dataTable .rdt_Table .rdt_TableBody .rdt_TableRow > div a {
+  color: #1953bb;
+}
+
+.passwordButton:hover {
+  cursor: pointer;
+}
+.no-select {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }

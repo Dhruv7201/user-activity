@@ -8,10 +8,10 @@ api_users = APIRouter()
 
 
 folder_path = "ss"
-access_key = 'your-access-key'
-secret_key = 'your-secret-key'
-minio_host = "bucket-url"
-minio_bucket = "bucket-name"
+access_key = 'IEWC51DQAPVJ489HHOGC'
+secret_key = '7WH5WYAW5OAC4NYX6G0LVBGG8NCOTQX9IBTGVLY2'
+minio_host = "objectstore.e2enetworks.net"
+minio_bucket = "test-db"
 
 client = Minio(
     minio_host,

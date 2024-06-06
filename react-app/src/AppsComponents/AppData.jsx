@@ -25,9 +25,7 @@ function AppData() {
       }));
 
       setAppData(formattedData);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -40,6 +38,10 @@ function AppData() {
 
   const handleClearSearch = () => {
     setSearchTerm("");
+  };
+
+  const escapeRegExp = (string) => {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   };
 
   const columns = [
@@ -74,38 +76,35 @@ function AppData() {
   ];
 
   const filteredAppData = appData.filter((row) =>
-    new RegExp(searchTerm, "i").test(row.window_title)
+    new RegExp(escapeRegExp(searchTerm), "i").test(row.window_title)
   );
 
   return (
     <>
-      <div className="card">
+      <div className="card dataTable">
         <div className="card-header">
           <div className="flex-container">
-            <Row>
-              <Col sm={5}>
+            <div className="row">
+              <div className="col-md-3">
                 <input
                   type="text"
                   placeholder="Search Application Name"
                   value={searchTerm}
                   onChange={handleSearch}
                   className="form-control"
-                  style={{ outline: "none" }}
+                  style={{ width: "100%" }}
                 />
-              </Col>
-              <Col
-                sm={6}
-                className="text-right flex align-items-center justify-content-end mt-1 mb-1"
-              >
-                <Button
-                  variant="btn btn-primary"
+              </div>
+              <div className="text-right flex align-items-center justify-content-end col-sm-9">
+                <button
+                  className="btn btn-primary"
                   onClick={handleClearSearch}
                   disabled={!searchTerm}
                 >
                   Clear Search
-                </Button>
-              </Col>
-            </Row>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
         <div className="card-body">

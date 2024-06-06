@@ -14,9 +14,7 @@ const UserList = () => {
         const response = await get("/users");
         setUserList(Object.entries(response.data.user_list));
         setTeams(response.data.teams);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+      } catch (error) {}
     }
 
     fetchData();
@@ -25,16 +23,13 @@ const UserList = () => {
   const handleDeleteUser = async (usernameToDelete) => {
     try {
       await del(`/users/${usernameToDelete}`);
-      console.log("User deleted:", usernameToDelete);
+
       const response = await get("/users");
       setUserList(Object.entries(response.data.user_list));
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
+    } catch (error) {}
   };
 
   const handleAssignTeam = async (username, team) => {
-    console.log("Assigning team:", team, "to user:", username);
     try {
       await updateTeamForUser(username, team);
       setUserList((prevUserList) =>
@@ -42,16 +37,13 @@ const UserList = () => {
           user === username ? [user, team] : [user, userTeam]
         )
       );
-    } catch (error) {
-      console.error("Error assigning team:", error);
-    }
+    } catch (error) {}
   };
 
   const updateTeamForUser = async (username, newTeam) => {
     try {
       // Make your API call here, for example:
       await put(`/users/${username}?teamname=${newTeam}`);
-      console.log(`Team updated for ${username}: ${newTeam}`);
     } catch (error) {
       throw new Error(`Error updating team for ${username}: ${error.message}`);
     }
@@ -95,33 +87,32 @@ const UserList = () => {
   ];
 
   return (
-    
     <div className="mb-5">
-    <div className="card mb-4">
-    <div className="card-body pt-4">
-      <div className="search-bar">
-        <div className="row mb-2">
-          <div className="col">
-            <Form.Control
-              type="text"
-              placeholder="Search by User"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          <div className="col">
-            <Button
-              variant="primary"
-              onClick={() => setSearchTerm("")}
-              disabled={!searchTerm}
-            >
-              Clear
-            </Button>
+      <div className="card mb-4">
+        <div className="card-body pt-4">
+          <div className="search-bar">
+            <div className="row mb-2">
+              <div className="col">
+                <Form.Control
+                  type="text"
+                  placeholder="Search by User"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+              <div className="col">
+                <Button
+                  variant="primary"
+                  onClick={() => setSearchTerm("")}
+                  disabled={!searchTerm}
+                >
+                  Clear
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      </div>
-    </div>
       <DataTable
         title="User List"
         columns={columns}
@@ -133,7 +124,6 @@ const UserList = () => {
         paginationServer
       />
     </div>
-    
   );
 };
 

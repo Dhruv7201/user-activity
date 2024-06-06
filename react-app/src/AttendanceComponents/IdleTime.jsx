@@ -14,9 +14,7 @@ const IdleTime = () => {
         )}`
       );
       setIdleTime(response.data.idle_time);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {

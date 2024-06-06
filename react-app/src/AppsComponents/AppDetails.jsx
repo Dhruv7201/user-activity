@@ -19,14 +19,22 @@ const AppDetails = () => {
       .then((response) => {
         setUserList(response.data);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   }, [fromDateYmd, toDateYmd, name]);
+
+  const handleDropDown = (e) => {
+    document.querySelectorAll(".toggle").forEach((item) => {
+      if (item !== e.currentTarget) {
+        item.classList.remove("open");
+      } else {
+        item.classList.toggle("open");
+      }
+    });
+  };
 
   return (
     <>
-      <div class="pagetitle">
+      <div className="pagetitle">
         <h1>Selected App: {name}</h1>
       </div>
       <Row>
@@ -36,12 +44,10 @@ const AppDetails = () => {
       </Row>
 
       <div className="card">
-        <div className="card-header">
-          <h4 className="card-title">User List</h4>
-        </div>
         <div className="card-body tableSize">
-          <table class="table table-hover">
-            <thead className="most-prod-head">
+          <h4 className="card-title">User List</h4>
+          <table className="table">
+            <thead>
               <tr>
                 <th>#</th>
                 <th>Employee Name</th>
@@ -49,28 +55,30 @@ const AppDetails = () => {
                 <th>Total Used Time</th>
               </tr>
             </thead>
-            <tbody className="most-prod-user">
+            <tbody>
               {Object.keys(userList).map((userId, index) => (
                 <tr key={index}>
-                  <td><b>{index + 1}</b></td>
+                  <td>
+                    <b>{index + 1}</b>
+                  </td>
                   <td>
                     <Link to={`/employee/${userId}`} className="link-style">
-                      <td>{userId}</td>
+                      {userId}
                     </Link>
                   </td>
                   <td>
-                    <ul>
+                    <ul className="toggle" onClick={handleDropDown}>
                       {userList[userId].start_time.map((startTime, i) => (
                         <li key={i}>{startTime}</li>
                       ))}
                     </ul>
                   </td>
                   <td>
-                    <div>
-                      {userList[userId].used_time.map((used_time, i) => (
-                        <div key={i}>{used_time}</div>
+                    <ul className="toggle" onClick={handleDropDown}>
+                      {userList[userId].used_time.map((usedTime, i) => (
+                        <li key={i}>{usedTime}</li>
                       ))}
-                    </div>
+                    </ul>
                   </td>
                 </tr>
               ))}

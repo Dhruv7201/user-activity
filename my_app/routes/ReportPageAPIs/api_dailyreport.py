@@ -29,7 +29,8 @@ async def dailyreport(request: Request, date: str = Query(None, description="Dat
     for doc in today_user_data:
         user_id = doc['user_id']
         idle_time = doc['idle_time']
-
+        if not doc['list_of_app']:
+            continue
         # Convert start_time strings to datetime objects
         start_times = [parse_datetime_with_fractional_seconds(app['start_time']) for app in doc['list_of_app']]
         

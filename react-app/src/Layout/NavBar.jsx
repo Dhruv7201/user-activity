@@ -67,7 +67,6 @@ function NavBar() {
   }, []);
 
   const handleSideBarToggle = () => {
-    console.log("clicked");
     const sidebar = document.getElementById("body");
     if (sidebar.classList.contains("toggle-sidebar")) {
       sidebar.classList.remove("toggle-sidebar");

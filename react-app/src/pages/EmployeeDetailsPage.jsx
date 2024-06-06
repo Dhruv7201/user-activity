@@ -11,9 +11,7 @@ function EmployeeDetailsPage() {
       <div class="pagetitle">
         <h1>Employee Details</h1>
       </div>
-      <Row>
-        <DateSelector />
-      </Row>
+      <DateSelector />
       <Row>
         <Col>
           <EmployeeList />

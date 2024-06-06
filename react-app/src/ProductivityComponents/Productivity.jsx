@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card } from "react-bootstrap";
 import { get } from "../api/api";
 import { useDateContext } from "../Context/DateContext";
+import { Link } from "react-router-dom";
 
 const Productivity = ({ url, title }) => {
   const { fromDateYmd, toDateYmd } = useDateContext();
@@ -26,7 +27,13 @@ const Productivity = ({ url, title }) => {
           <h5 class="card-title">{title}</h5>
           <div className="card-productivity">
             <p>
-              {title === "Productivity" ? `${productivity}%` : productivity}
+              {title === "Productivity" ? (
+                `${productivity}%`
+              ) : (
+                <Link to={`/apps/${productivity}`} className="link-style">
+                  {productivity}
+                </Link>
+              )}
             </p>
           </div>
         </div>

@@ -26,18 +26,12 @@ const ManageTeamsPage = () => {
   const addTeamToApi = async (teamName) => {
     try {
       if (!teamName) {
-        console.error("Team name is required.");
         return;
       }
 
-      console.log("Request Payload:", { team: teamName });
-
       // Make your API call here, for example:
       await post(`/add_team/${teamName}`);
-      console.log(`Team added: ${teamName}`);
-    } catch (error) {
-      console.error(`Error adding team: ${error.message}`);
-    }
+    } catch (error) {}
   };
 
   const deleteTeam = async (index) => {
@@ -52,10 +46,7 @@ const ManageTeamsPage = () => {
   const deleteTeamFromApi = async (teamName) => {
     try {
       await del(`/teams/${teamName}`);
-      console.log(`Team deleted: ${teamName}`);
-    } catch (error) {
-      console.error(`Error deleting team: ${error.message}`);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -63,9 +54,7 @@ const ManageTeamsPage = () => {
       try {
         const response = await get("/teams");
         setTeams(response.data.teams);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+      } catch (error) {}
     }
 
     fetchData();
@@ -83,15 +72,15 @@ const ManageTeamsPage = () => {
               <label className="mt-2">Team name:</label>
             </Col>
             <Col>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Enter team name"
-                  aria-label="Enter team name"
-                  aria-describedby="basic-addon2"
-                  onChange={(e) => setTeamName(e.target.value)}
-                  value={newTeam}
-                />
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Enter team name"
+                aria-label="Enter team name"
+                aria-describedby="basic-addon2"
+                onChange={(e) => setTeamName(e.target.value)}
+                value={newTeam}
+              />
             </Col>
           </Row>
           <br />
@@ -122,7 +111,7 @@ const ManageTeamsPage = () => {
             <p>No teams available. Add a team using the "Add Team" button.</p>
           )}
         </div>
-    </div>
+      </div>
     </>
   );
 };

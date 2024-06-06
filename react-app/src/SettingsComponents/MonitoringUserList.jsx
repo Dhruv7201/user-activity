@@ -15,9 +15,7 @@ const MonitoringUserList = () => {
           ([username, userData]) => ({ username, ...userData })
         );
         setUsers(usersArray);
-      } catch (error) {
-        console.error("Error fetching monitoring users:", error);
-      }
+      } catch (error) {}
     };
 
     fetchData();
@@ -35,9 +33,7 @@ const MonitoringUserList = () => {
         ([username, userData]) => ({ username, ...userData })
       );
       setUsers(usersArray);
-    } catch (error) {
-      console.error("Error deleting monitoring user:", error);
-    }
+    } catch (error) {}
   };
 
   return (

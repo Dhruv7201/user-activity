@@ -15,11 +15,8 @@ const AttendancePie = () => {
     )
       .then((response) => {
         setChartData(response.data);
-        console.log(response.data);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   }, [fromDateYmd, toDateYmd]);
 
   const totalPresent = chartData.present.reduce((acc, value) => acc + value, 0);

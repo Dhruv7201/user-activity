@@ -2,15 +2,17 @@ import React, { useEffect, useState } from "react";
 import { useDateContext } from "../Context/DateContext.jsx";
 import { Link } from "react-router-dom";
 import { get } from "../api/api.js";
+import DataTable from "react-data-table-component";
 
 function EmployeeList() {
+  const [searchTerm, setSearchTerm] = useState("");
   const { dateYmd } = useDateContext();
   const api =
     "/employeelist?date=" +
     dateYmd +
     "&teamname=" +
     localStorage.getItem("teamname");
-  const [appData, setAppData] = useState([]);
+  const [employeeData, setEmployeeData] = useState([]);
 
   const fetchData = async () => {
     try {
@@ -25,10 +27,12 @@ function EmployeeList() {
         total_time: userData.total_time,
       }));
 
-      setAppData(userArray);
-    } catch (error) {
-      console.error(error);
-    }
+      setEmployeeData(userArray);
+    } catch (error) {}
+  };
+
+  const escapeRegExp = (string) => {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   };
 
   useEffect(() => {
@@ -42,6 +46,13 @@ function EmployeeList() {
   }, [dateYmd]);
 
   const columns = [
+    {
+      name: "S.No",
+      selector: (row, index) => index + 1,
+      sortable: true,
+      minWidth: "50px",
+      maxWidth: "100px",
+    },
     {
       name: "User Name",
       selector: "name",
@@ -79,30 +90,58 @@ function EmployeeList() {
     },
   ];
 
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleClearSearch = () => {
+    setSearchTerm("");
+  };
+
+  const filterBySearchTerm = (row) => {
+    return new RegExp(escapeRegExp(searchTerm), "i").test(row.name);
+  };
+
+  const filteredEmployeeData = employeeData.filter(filterBySearchTerm);
+
   return (
     <>
-      <div className="card">
+      <div className="card dataTable">
+        <div className="card-header">
+          <div className="flex-container">
+            <div className="row">
+              <div className="col-md-3">
+                <input
+                  type="text"
+                  placeholder="Search Application Name"
+                  value={searchTerm}
+                  onChange={handleSearch}
+                  className="form-control"
+                  style={{ width: "100%" }}
+                />
+              </div>
+              <div className="text-right flex align-items-center justify-content-end mb-1 col-sm-9">
+                <button
+                  className="btn btn-primary"
+                  onClick={handleClearSearch}
+                  disabled={!searchTerm}
+                >
+                  Clear Search
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="card-body">
-          <table id="myTable" className="table">
-            <thead>
-              <tr>
-                {columns.map((column) => (
-                  <th key={column.name}>{column.name}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {appData.map((row) => (
-                <tr key={row.name}>
-                  {columns.map((column) => (
-                    <td key={column.name}>
-                      {column.cell ? column.cell(row) : row[column.selector]}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <DataTable
+            columns={columns}
+            data={filteredEmployeeData}
+            pagination={true}
+            paginationPerPage={10}
+            paginationRowsPerPageOptions={[10, 20, 30, 40, 50]}
+            highlightOnHover={true}
+            dense={true}
+          />
         </div>
       </div>
     </>

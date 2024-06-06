@@ -15,7 +15,7 @@ function Layout({ children }) {
         <div class="copyright">
           &copy; Copyright
           <strong>
-            <span>Ethics Infotech</span>
+            <span> Ethics Infotech</span>
           </strong>
           . All Rights Reserved
         </div>

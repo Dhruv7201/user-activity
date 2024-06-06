@@ -14,9 +14,7 @@ const WorkTime = () => {
         )}`
       );
       setWorkTime(response.data.work_time);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
