@@ -6,7 +6,7 @@ from datetime import timedelta
 
 def connect_to_rabbitmq():
     connection = pika.BlockingConnection(
-        pika.ConnectionParameters('user-agent-python-rabbitmq-1', 5672, '/', pika.PlainCredentials('valuusragent', 'Lh85*3q')))
+        pika.ConnectionParameters('user-agent-python-rabbitmq-1', 5672, '/', pika.PlainCredentials('username', 'password')))
     channel = connection.channel()
     channel.queue_declare(queue='json_queue')
     return channel, connection
