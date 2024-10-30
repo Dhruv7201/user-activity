@@ -11,8 +11,8 @@ import io
 api_file_upload = APIRouter()
 bucket_link = "objectstore.e2enetworks.net"
 bucket_name = 'test-db'
-access_key = 'IEWC51DQAPVJ489HHOGC'
-secret_key = '7WH5WYAW5OAC4NYX6G0LVBGG8NCOTQX9IBTGVLY2'
+access_key = 'ACCESS_KEY'
+secret_key = 'SECRATE_KEY'
 client = minio.Minio(
     bucket_link,
     access_key=access_key,
