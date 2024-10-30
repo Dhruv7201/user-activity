@@ -4,7 +4,9 @@ import shutil
 import win32com.client
 from datetime import datetime
 
-
+'''
+get the user folder path and create a folder activity in it
+'''
 directory = os.path.expanduser('~')
 directory = os.path.join(directory, 'activity')
 if not os.path.exists(directory):
@@ -20,7 +22,9 @@ if not os.path.exists(error_log_file):
         f.write("Error Log\n")
 
 
-
+'''
+copy exe to user folder if not exists to run it from there to keep the same exe location for all the users
+'''
 def copy_exe_to_user_folder():
     try:
         if os.path.exists(os.path.join(directory, window_exe_name)):
@@ -32,6 +36,10 @@ def copy_exe_to_user_folder():
         with open(error_log_file, 'a') as f:
             f.write(f"Error while copying exe to user folder: {e}\n")
 
+
+'''
+create a shortcut of the exe in the startup folder to run the exe on startup of the system
+'''
 def create_shortcut(target_path, shortcut_name, description="Shortcut to My App"):
     try:
         
@@ -54,6 +62,10 @@ def create_shortcut(target_path, shortcut_name, description="Shortcut to My App"
         with open(error_log_file, 'a') as f:
             f.write(f"Error while creating shortcut: {e}\n")
 
+
+'''
+copy the shortcut to the startup folder short cut will trigger the exe to run on startup
+'''
 def copy_shortcut_to_startup(shortcut_path):
     print("Copying shortcut to startup folder...")
     
@@ -74,6 +86,10 @@ def copy_shortcut_to_startup(shortcut_path):
         with open(error_log_file, 'a') as f:
             f.write(f"Error while copying shortcut to startup folder: {e}\n")
 
+
+'''
+it will run the process of creating shortcut and copying it to the startup folder
+'''
 def startup_config():
     try:
         # copy exe to user folder

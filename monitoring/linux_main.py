@@ -17,6 +17,11 @@ last_mouse_activity = time.time()
 last_keyboard_activity = time.time()
 today = datetime.now().strftime("%Y-%m-%d")
 
+'''
+Test code to make it work on Linux as well
+'''
+
+
 ignore_window_titles = [
     "Battery Meter", "Network Flyout", "Window", "Task Host Window", "Folder In Use",
     "GDI+ Window (Explorer.EXE)", "Mail", "Add an account", "DDE Server Window",

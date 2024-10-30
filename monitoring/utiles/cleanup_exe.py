@@ -2,6 +2,10 @@ import os
 
 exe_folder_name = 'activity'
 
+
+'''
+it will stop the executable and delete the shortcut from the startup folder
+'''
 def cleanup_exe():
     try:
         # Get the directory where the executable is stored
