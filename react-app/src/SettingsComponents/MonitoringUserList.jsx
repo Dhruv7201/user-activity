@@ -53,7 +53,6 @@ const MonitoringUserList = () => {
           {expandedIndex === index && (
             <Card.Body>
               <ListGroup variant="flush">
-                <ListGroup.Item>Password: {user.password}</ListGroup.Item>
                 <ListGroup.Item>Team Name: {user.teamname}</ListGroup.Item>
               </ListGroup>
             </Card.Body>
@@ -73,3 +72,4 @@ const MonitoringUserList = () => {
 };
 
 export default MonitoringUserList;
+

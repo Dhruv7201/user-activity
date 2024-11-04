@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+import bcrypt
 
 
 def db_connection():
@@ -7,14 +8,16 @@ def db_connection():
     db = client['mydatabase']
     return db
 
-
+def hash_password(password: str) -> str:
+    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
 def check_admin():
     db = db_connection()
     login_data = db['login']
     db_user = login_data.find_one({})
     if not db_user:
-        login_data.insert_one({'username': 'admin', 'password': 'admin', 'teamname': 'admin'})
-        print('Admin created successfully')
+        password = hash_password('admin')
+        login_data.insert_one({'username': 'admin', 'password': password, 'teamname': 'admin'})
     else:
-        print('Admin already exists')
+        pass
+    

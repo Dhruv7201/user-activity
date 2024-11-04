@@ -2,6 +2,7 @@ from fastapi import APIRouter, Query, Path, Header
 from fastapi.responses import JSONResponse
 from methods.db_method import db_connection
 from minio import Minio
+import bcrypt
 
 
 api_users = APIRouter()
@@ -19,6 +20,10 @@ client = Minio(
     secret_key=secret_key,
     secure=True,
 )
+
+
+def hash_password(password: str) -> str:
+    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
 
 @api_users.get("/users", tags=["SettingsPage"])
@@ -115,6 +120,7 @@ async def put_user(user_id: str = Path(..., min_length=1, max_length=20), teamna
 async def add_monitoring_user(data: dict):
     username = data.get('username')
     password = data.get('password')
+    password = hash_password(password)
     selectedTeams = data.get('selectedTeams')
 
     db = db_connection()
