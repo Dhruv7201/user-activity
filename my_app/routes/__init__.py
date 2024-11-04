@@ -14,13 +14,14 @@ from .ProductivityAPIs.api_productivitypie import api_productivitypie
 from .DashBoardAPIs.api_AttendanceChart import api_attendance_chart
 from .DashBoardAPIs.api_UserRanking import api_userRankings
 from .AttendancePageAPIs.attendancePercentage import api_attendancePercentage
-from .AttendancePageAPIs.totlaTime import api_totalTime
+from .AttendancePageAPIs.totalTime import api_totalTime
 from .SettingsAPIs.api_users import api_users
 from .SettingsAPIs.api_teams import api_teams
 from .ReportPageAPIs.api_dailyreport import api_dailyreport
 from .ReportPageAPIs.api_monthlyreport import api_monthlyreport
 from .ReportPageAPIs.api_appBar import api_appBar
 from .ExeConfig.config import api_config
+from .ExeConfig.updater import api_update
 
 
 def register_api(app):
@@ -47,3 +48,4 @@ def register_api(app):
     app.include_router(api_appBar, prefix="/api")
     app.include_router(api_teams, prefix="/api")
     app.include_router(api_config, prefix="/api")
+    app.include_router(api_update, prefix="/api")
