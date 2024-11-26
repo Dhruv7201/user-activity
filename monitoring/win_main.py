@@ -307,7 +307,7 @@ if __name__ == "__main__":
         """
         update the exe file if there is a new version available.
         """
-        update_exe()
+        # update_exe()
     except Exception as e:
         write_error_in_rabbitMQ(f"Error while checking for updates: {e}")
     try:
