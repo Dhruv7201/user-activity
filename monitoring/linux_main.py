@@ -9,33 +9,60 @@ from utiles.u_id import get_uid
 from utiles.utiles import write_in_rabbitMQ, upload_ss_to_server
 # from utiles.startup import startup_config
 
-directory = os.path.expanduser('~')
-ss_dir = os.path.join(directory, 'ss')
+directory = os.path.expanduser("~")
+ss_dir = os.path.join(directory, "ss")
 running = True
 idle_time = timedelta(seconds=0)
 last_mouse_activity = time.time()
 last_keyboard_activity = time.time()
 today = datetime.now().strftime("%Y-%m-%d")
 
-'''
+"""
 Test code to make it work on Linux as well
-'''
+"""
 
 
 ignore_window_titles = [
-    "Battery Meter", "Network Flyout", "Window", "Task Host Window", "Folder In Use",
-    "GDI+ Window (Explorer.EXE)", "Mail", "Add an account", "DDE Server Window",
-    "OneDrive - Personal", "NotifyIconWindowTitle", "SecurityHealthSystray",
-    "MS_WebcheckMonitor", "Settings", "Rtc Video PnP Listener", "AcrobatTrayIcon",
-    "ESET Proxy", "GDI+ Window (eguiproxy.exe)", "Microsoft Text Input Application",
-    "NvSvc", "BluetoothNotificationAreaIconWindowClass", "UxdService",
-    "Windows Push Notifications Platform", "NvContainerWindowClass00000A20",
-    "DWM Notification Window", "MSCTFIME UI", "Default IME", "Program Manager",
-    ".NET-BroadcastEventWindow.b7ab7b.0", "NvContainerWindowClass00002B90",
-    "InnoSetupLdrWindow", "Setup - Microsoft Visual Studio Code (User)",
-    "Progress", "Setup", "Microsoft Office Sync Process", "OfficePowerManagerWindow",
-    "GDI+ Window (MsoSync.exe)", "NvContainerWindowClass0000114C",
+    "Battery Meter",
+    "Network Flyout",
+    "Window",
+    "Task Host Window",
+    "Folder In Use",
+    "GDI+ Window (Explorer.EXE)",
+    "Mail",
+    "Add an account",
+    "DDE Server Window",
+    "OneDrive - Personal",
+    "NotifyIconWindowTitle",
+    "SecurityHealthSystray",
+    "MS_WebcheckMonitor",
+    "Settings",
+    "Rtc Video PnP Listener",
+    "AcrobatTrayIcon",
+    "ESET Proxy",
+    "GDI+ Window (eguiproxy.exe)",
+    "Microsoft Text Input Application",
+    "NvSvc",
+    "BluetoothNotificationAreaIconWindowClass",
+    "UxdService",
+    "Windows Push Notifications Platform",
+    "NvContainerWindowClass00000A20",
+    "DWM Notification Window",
+    "MSCTFIME UI",
+    "Default IME",
+    "Program Manager",
+    ".NET-BroadcastEventWindow.b7ab7b.0",
+    "NvContainerWindowClass00002B90",
+    "InnoSetupLdrWindow",
+    "Setup - Microsoft Visual Studio Code (User)",
+    "Progress",
+    "Setup",
+    "Microsoft Office Sync Process",
+    "OfficePowerManagerWindow",
+    "GDI+ Window (MsoSync.exe)",
+    "NvContainerWindowClass0000114C",
 ]
+
 
 def take_screen_shot():
     global running
@@ -58,17 +85,21 @@ def take_screen_shot():
         # Every 1 hour
         time.sleep(3600)
 
+
 def get_active_window_title():
     global running
     if not running:
         return
     d = display.Display()
     root = d.screen().root
-    window_id = root.get_full_property(d.intern_atom('_NET_ACTIVE_WINDOW'), X.AnyPropertyType).value[0]
-    window = d.create_resource_object('window', window_id)
+    window_id = root.get_full_property(
+        d.intern_atom("_NET_ACTIVE_WINDOW"), X.AnyPropertyType
+    ).value[0]
+    window = d.create_resource_object("window", window_id)
     window_title = window.get_wm_name()
     d.close()
     return window_title
+
 
 def get_opened_windows():
     global data, running
@@ -76,31 +107,56 @@ def get_opened_windows():
         while True:
             time.sleep(1)
             active_window_title = get_active_window_title()
-            existing_window_titles = [window["window_title"] for window in data["list_of_app"]]
+            existing_window_titles = [
+                window["window_title"] for window in data["list_of_app"]
+            ]
 
             # Replace this code with Linux-specific window enumeration
             # You can use 'xdotool' or similar tools to list open windows on Linux
-            process = subprocess.Popen(["xdotool", "search", "--name", ""], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            process = subprocess.Popen(
+                ["xdotool", "search", "--name", ""],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
             stdout, _ = process.communicate()
-            window_ids = [w.decode('utf-8').strip() for w in stdout.splitlines()]
+            window_ids = [w.decode("utf-8").strip() for w in stdout.splitlines()]
 
             for window_id in window_ids:
-                window_title = subprocess.check_output(["xdotool", "getwindowname", window_id], stderr=subprocess.DEVNULL).decode("utf-8").strip()
-                if window_title not in ignore_window_titles and window_title != '':
+                window_title = (
+                    subprocess.check_output(
+                        ["xdotool", "getwindowname", window_id],
+                        stderr=subprocess.DEVNULL,
+                    )
+                    .decode("utf-8")
+                    .strip()
+                )
+                if window_title not in ignore_window_titles and window_title != "":
                     found_window = None
                     if window_title in existing_window_titles:
-                        found_window = next(window for window in data["list_of_app"] if window["window_title"] == window_title)
+                        found_window = next(
+                            window
+                            for window in data["list_of_app"]
+                            if window["window_title"] == window_title
+                        )
                     if found_window:
                         if window_title == active_window_title:
-                            used_time = datetime.strptime(found_window["used_time"], "%H:%M:%S")
+                            used_time = datetime.strptime(
+                                found_window["used_time"], "%H:%M:%S"
+                            )
                             new_used_time = used_time + timedelta(seconds=1)
-                            found_window["used_time"] = str(new_used_time.time())  # Changed the format
+                            found_window["used_time"] = str(
+                                new_used_time.time()
+                            )  # Changed the format
                     else:
-                        data["list_of_app"].append({
-                            "window_title": window_title,
-                            "start_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"),
-                            "used_time": "00:00:00"
-                        })
+                        data["list_of_app"].append(
+                            {
+                                "window_title": window_title,
+                                "start_time": datetime.now().strftime(
+                                    "%Y-%m-%d %H:%M:%S.%f"
+                                ),
+                                "used_time": "00:00:00",
+                            }
+                        )
 
             data = write_in_rabbitMQ(data)
     except Exception as e:
@@ -109,6 +165,7 @@ def get_opened_windows():
 
 def detect_inactivity():
     global idle_time, last_mouse_activity, last_keyboard_activity, data, running
+
     def on_mouse_move(x, y):
         global last_mouse_activity, idle_time, running
         running = True
@@ -129,7 +186,9 @@ def detect_inactivity():
         running = True
         last_mouse_activity = time.time()
 
-    mouse_listener = mouse.Listener(on_move=on_mouse_move, on_scroll=on_scroll, on_click=on_mouse_click)
+    mouse_listener = mouse.Listener(
+        on_move=on_mouse_move, on_scroll=on_scroll, on_click=on_mouse_click
+    )
     keyboard_listener = keyboard.Listener(on_press=on_key_press)
     mouse_listener.start()
     keyboard_listener.start()
@@ -153,13 +212,14 @@ def detect_inactivity():
         mouse_listener.stop()
         keyboard_listener.stop()
 
+
 def main():
     global data, running
     data = {
         "user_id": get_uid(),
         "date": today,
         "list_of_app": [],
-        "idle_time": "00:00:00"
+        "idle_time": "00:00:00",
     }
     global running
     # send data with get_opened_windows as argument
@@ -172,6 +232,7 @@ def main():
             time.sleep(1)
     except KeyboardInterrupt:
         running = False
+
 
 if __name__ == "__main__":
     # startup_config()

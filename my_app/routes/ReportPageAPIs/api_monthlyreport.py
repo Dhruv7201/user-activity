@@ -5,26 +5,32 @@ from methods.db_method import db_connection
 
 api_monthlyreport = APIRouter()
 
+
 @api_monthlyreport.get("/monthlyreport", tags=["Reports Page"])
-async def monthlyreport(request: Request, month: str = Query(None, description="Month (YYYY-MM)", regex=r'\d{4}-\d{2}', example="2023-01"),
-                        teamname: str = Header(...)):
+async def monthlyreport(
+    request: Request,
+    month: str = Query(
+        None, description="Month (YYYY-MM)", regex=r"\d{4}-\d{2}", example="2023-01"
+    ),
+    teamname: str = Header(...),
+):
     if not month:
         month = datetime.now().strftime("%Y-%m")
     today = datetime.now().date()
     db = db_connection()
-    collection = db['user_data']
-    users_collection = db['users']
+    collection = db["user_data"]
+    users_collection = db["users"]
     user_list = []
-    if teamname == 'admin':
+    if teamname == "admin":
         for user in users_collection.find():
-            user_list.append(user['user_id'])
+            user_list.append(user["user_id"])
     else:
-        for user in users_collection.find({'teamname': teamname}):
-            user_list.append(user['user_id'])
+        for user in users_collection.find({"teamname": teamname}):
+            user_list.append(user["user_id"])
     result = {}
     for user in user_list:
         result[user] = {}
-        result[user]['user_id'] = user
+        result[user]["user_id"] = user
         for i in range(1, 32):
             try:
                 if i < 10:

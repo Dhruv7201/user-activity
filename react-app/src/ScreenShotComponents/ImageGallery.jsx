@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Loading from "./loading.svg";
 import "./FileDownload.css";
 
@@ -18,6 +18,8 @@ const LoadingSpinner = () => (
 );
 
 const ImageGallery = ({
+  setNewPerson,
+  isNewPerson,
   setLoadFlag,
   loadFlag,
   folderList,
@@ -35,6 +37,8 @@ const ImageGallery = ({
 
   // array containing images
   const [displayedImages, setDisplayedImages] = useState([]);
+  const loadedImage = useRef([]);
+
   const apiUrl = import.meta.env.VITE_API_URL;
 
   // Find the selected folder based on date and user
@@ -42,6 +46,7 @@ const ImageGallery = ({
     (folder) => folder.date === selectedDate && folder.user === selectedUser
   );
 
+  const currentDate = dateYmd;
   const closeImageOverlay = () => setSelectedImage(null);
   const openImageOverlay = (file) => setSelectedImage(file);
 
@@ -61,15 +66,18 @@ const ImageGallery = ({
       }
     };
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [selectedImage]);
-
-  useEffect(() => {
-    if (selectedFolder) {
-      setDisplayedImages(selectedFolder.files.slice(0, 8 * imageCount));
+    if (selectedFolder && isNewPerson) {
+      setImageCount(1);
+      loadedImage.current = [];
+      setDisplayedImages(selectedFolder.files.slice(0, 8));
+      setNewPerson(false);
     }
-  }, [imageCount, selectedFolder]);
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [selectedImage, selectedFolder]);
 
   const loadMoreImages = () => {
     if (selectedFolder) {
@@ -78,6 +86,7 @@ const ImageGallery = ({
         8 * imageCount,
         8 * newImageCount
       );
+
       setDisplayedImages([...displayedImages, ...newImages]);
       setImageCount(newImageCount);
       setLoadingImage(true);
@@ -86,102 +95,112 @@ const ImageGallery = ({
 
   return (
     <>
-      <div className="row">
-        {displayedImages.map((file, fileIndex) => (
-          <div className="col-md-3 col-6 text-center" key={fileIndex}>
-            <div className="image-overlay" style={{ position: "relative" }}>
-              {fileIndex >= 8 * (imageCount - 1) && loadingImage && (
-                <LoadingSpinner />
-              )}
+      {!isNewPerson ? (
+        <div>
+          <div className="row">
+            {displayedImages.map((file, fileIndex) => (
+              <div className="col-md-3 col-6 text-center" key={fileIndex}>
+                <div className="image-overlay" style={{ position: "relative" }}>
+                  {!loadedImage.current.includes(file) && loadingImage && (
+                    <LoadingSpinner />
+                  )}
 
-              <div style={imageStyle}>
-                <img
-                  src={`${apiUrl}/thumbnail_file/${dateYmd}/${selectedUser}/${file}/${token}`}
-                  alt={`Image ${fileIndex + 1}`}
-                  onClick={() => openImageOverlay(file)}
-                  onLoad={() => {
-                    setLoadingImage(false);
-                    setLoadFlag(false);
-                  }}
-                  style={{
-                    ...imageStyle,
-                    visibility: loadFlag ? "hidden" : "visible",
-                  }}
-                  loading="lazy"
-                />
+                  <div style={imageStyle}>
+                    <img
+                      src={`${apiUrl}/file/${dateYmd}/${selectedUser}/${
+                        file.split(".")[0]
+                      }_thumbnail.png/${token}`}
+                      alt={`Image ${fileIndex + 1}`}
+                      onClick={() => openImageOverlay(file)}
+                      onLoad={() => {
+                        setLoadingImage(false);
+                        setLoadFlag(false);
+                        loadedImage.current.push(file);
+                      }}
+                      style={{
+                        ...imageStyle,
+                        visibility: loadFlag ? "hidden" : "visible",
+                      }}
+                      loading="lazy"
+                    />
+                  </div>
+                  <p style={{ textAlign: "center", marginTop: "5px" }}>
+                    {file.slice(0, -4).replace("_thumbnail", "")}
+                  </p>
+                </div>
               </div>
-              <p style={{ textAlign: "center", marginTop: "5px" }}>
-                {file.slice(0, -4).replace("_thumbnail", "")}
-              </p>
+            ))}
+          </div>
+          <div className="row">
+            <div className="col-md-12 text-center">
+              <button
+                onClick={loadMoreImages}
+                className={`button-18   ${
+                  8 * imageCount >= selectedFolder?.files?.length
+                    ? "d-none"
+                    : ""
+                }`}
+                role="button"
+              >
+                View more
+              </button>
             </div>
           </div>
-        ))}
-      </div>
-      <div className="row">
-        <div className="col-md-12 text-center">
-          <button
-            onClick={loadMoreImages}
-            className={`button-18 ${
-              8 * imageCount >= selectedFolder?.files?.length ? "d-none" : ""
-            }`}
-            role="button"
-          >
-            View more
-          </button>
-        </div>
-      </div>
 
-      {selectedImage && (
-        <div
-          className="overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            background: "rgba(0, 0, 0, 0.8)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 999,
-          }}
-          onClick={closeImageOverlay}
-        >
-          <div
-            className="popup-image-overlay"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              position: "relative",
-              overflow: "hidden",
-            }}
-          >
-            <img
-              src={`${apiUrl}/download_file/${dateYmd}/${selectedUser}/${selectedImage}/${token}`}
-              alt={`Image`}
-              style={{ ...imageStyle, width: "80%", height: "80%" }}
-              onClick={(e) => e.stopPropagation()}
-            />
-          </div>
-          <span
-            style={{
-              color: "white",
-              position: "absolute",
-              top: 10,
-              right: 30,
-              cursor: "pointer",
-              fontSize: "30px",
-            }}
-            onClick={closeImageOverlay}
-          >
-            &times;
-          </span>
+          {selectedImage && (
+            <div
+              className="overlay"
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                background: "rgba(0, 0, 0, 0.8)",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                zIndex: 999,
+              }}
+              onClick={closeImageOverlay}
+            >
+              <div
+                className="popup-image-overlay"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  position: "relative",
+                  overflow: "hidden",
+                }}
+              >
+                <img
+                  src={`${apiUrl}/file/${dateYmd}/${selectedUser}/${selectedImage}/${token}`}
+                  alt={`Image`}
+                  style={{ ...imageStyle, width: "80%", height: "80%" }}
+                  onClick={(e) => e.stopPropagation()}
+                />
+              </div>
+              <span
+                style={{
+                  color: "white",
+                  position: "absolute",
+                  top: 10,
+                  right: 30,
+                  cursor: "pointer",
+                  fontSize: "30px",
+                }}
+                onClick={closeImageOverlay}
+              >
+                &times;
+              </span>
+            </div>
+          )}
         </div>
-      )}
+      ) : null}
     </>
   );
 };
 
 export default ImageGallery;
+

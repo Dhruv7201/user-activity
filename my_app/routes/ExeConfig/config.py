@@ -16,8 +16,16 @@ def get_exe_config():
     end_working_hour = 21
     # in week days number 1 to 7
     working_days = 5
-    return JSONResponse({"status": "success", "screen_shot_interval": screen_shot_interval, "ideal_time_threshold": ideal_time_threshold,
-                            "start_working_hour": start_working_hour, "end_working_hour": end_working_hour, "working_days": working_days})
+    return JSONResponse(
+        {
+            "status": "success",
+            "screen_shot_interval": screen_shot_interval,
+            "ideal_time_threshold": ideal_time_threshold,
+            "start_working_hour": start_working_hour,
+            "end_working_hour": end_working_hour,
+            "working_days": working_days,
+        }
+    )
 
 
 @api_config.get("/rabbitmq_config/", tags=["RabbitMQ"])
@@ -27,6 +35,13 @@ def get_rabbitmq_config():
     rabbitmq_virtual_host = "/"
     rabbitmq_username = "valuusragent"
     rabbitmq_password = "Lh85*3q"
-    return JSONResponse({"status": "success", "rabbitmq_host": rabbitmq_host, "rabbitmq_port": rabbitmq_port,
-                            "rabbitmq_virtual_host": rabbitmq_virtual_host, "rabbitmq_username": rabbitmq_username,
-                            "rabbitmq_password": rabbitmq_password})
+    return JSONResponse(
+        {
+            "status": "success",
+            "rabbitmq_host": rabbitmq_host,
+            "rabbitmq_port": rabbitmq_port,
+            "rabbitmq_virtual_host": rabbitmq_virtual_host,
+            "rabbitmq_username": rabbitmq_username,
+            "rabbitmq_password": rabbitmq_password,
+        }
+    )

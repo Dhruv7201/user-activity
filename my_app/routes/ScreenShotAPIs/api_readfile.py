@@ -8,11 +8,10 @@ from datetime import datetime
 from jose import jwt
 
 
-
 api_readfile = APIRouter()
 
-access_key = 'ACCESS_KEY'
-secret_key = 'SECRET_KEY'
+access_key = "ACCESS_KEY"
+secret_key = "SECRET_KEY"
 minio_host = "objectstore.e2enetworks.net"
 minio_bucket = "test-db"
 SECRET_KEY = "FastAPI-reactJS"
@@ -27,18 +26,21 @@ client = Minio(
 
 
 @api_readfile.get("/list_files", tags=["ScreenShotPage"])
-async def list_files(request: Request, date: str = Query(None), teamname: str = Header(...)):
-
+async def list_files(
+    request: Request, date: str = Query(None), teamname: str = Header(...)
+):
     files_list = []
     user_list_collection = db_connection()["users"]
     if teamname == "admin":
         user_list = user_list_collection.find()
     else:
         user_list = user_list_collection.find({"teamname": teamname})
-    user_list = list(user['user_id'] for user in user_list)
+    user_list = list(user["user_id"] for user in user_list)
     if date:
         try:
-            objects = client.list_objects(minio_bucket, prefix=f"ss/{date}/", recursive=True)
+            objects = client.list_objects(
+                minio_bucket, prefix=f"ss/{date}/", recursive=True
+            )
             for obj in objects:
                 if obj.object_name.split("/")[2] in user_list:
                     if not obj.object_name.endswith("_thumbnail.png"):
@@ -51,10 +53,7 @@ async def list_files(request: Request, date: str = Query(None), teamname: str = 
         for file_path in files_list:
             user, file_name = os.path.split(file_path)
             user_name = user.split("/")[-1]
-            user_data = {
-                "user": user_name,
-                "files": [file_name]
-            }
+            user_data = {"user": user_name, "files": [file_name]}
             if user_name in [user["user"] for user in user_list]:
                 for user in user_list:
                     if user["user"] == user_name:
@@ -64,57 +63,42 @@ async def list_files(request: Request, date: str = Query(None), teamname: str = 
 
         return user_list
     else:
-        return JSONResponse(status_code=400, content={"error": "Date parameter is required"})
+        return JSONResponse(
+            status_code=400, content={"error": "Date parameter is required"}
+        )
 
 
-
-@api_readfile.get("/thumbnail_file/{date}/{user}/{file_name}/{token}", tags=["ScreenShotPage"])
-async def thumbnail_file(request: Request, date: str, user: str, file_name: str, token: str):
+@api_readfile.get("/file/{date}/{user}/{file_name}/{token}", tags=["ScreenShotPage"])
+async def file_handler(
+    request: Request, date: str, user: str, file_name: str, token: str
+):
     try:
-
+        # Validate the token
         try:
             payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
             exp = payload.get("exp")
             if exp < datetime.utcnow().timestamp():
                 return JSONResponse(status_code=401, content={"error": "Token expired"})
-        except Exception as e:
+        except Exception:
             return JSONResponse(status_code=401, content={"error": "Invalid token"})
 
-        thumbnail_file_name = file_name.split(".")[0] + "_thumbnail.png"
-        object_path = f"ss/{date}/{user}/{thumbnail_file_name}"
-
-        # Check if thumbnail exists in bucket
-        objects = client.list_objects(minio_bucket, f"ss/{date}/{user}/", recursive=True)
-        if thumbnail_file_name not in [obj.object_name.split("/")[-1] for obj in objects]:
-            # Redirect to download file if thumbnail does not exist
-            return RedirectResponse(url=f"/api/download_file/{date}/{user}/{file_name}")
-
-        response = client.get_object(minio_bucket, object_path)
-        buffer = BytesIO(response.read())
-        buffer.seek(0)
-
-        return StreamingResponse(buffer, media_type="image/png")
-    except Exception as e:
-        print(str(e))
-        return JSONResponse(status_code=400, content={"error": str(e)})
-    
-
-
-@api_readfile.get("/download_file/{date}/{user}/{file_name}/{token}", tags=["ScreenShotPage"])
-async def download_file(request: Request, date: str, user: str, file_name: str, token: str):
-    try:
+        is_thumbnail = "_thumbnail" in file_name
+        object_path = f"ss/{date}/{user}/{file_name}"
         try:
-            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-            exp = payload.get("exp")
-            if exp < datetime.utcnow().timestamp():
-                return JSONResponse(status_code=401, content={"error": "Token expired"})
+            # Fetch the file from the bucket
+            response = client.get_object(minio_bucket, object_path)
+            buffer = BytesIO(response.read())
+            buffer.seek(0)
         except Exception as e:
-            return JSONResponse(status_code=401, content={"error": "Invalid token"})
+            # if error on thumbnail fetch the original image
+            if is_thumbnail:
+                object_path = object_path.replace("_thumbnail", "")
+                response = client.get_object(minio_bucket, object_path)
+                buffer = BytesIO(response.read())
+                buffer.seek(0)
+            else:
+                return JSONResponse(status_code=400, content={"error": str(e)})
 
-        response = client.get_object(minio_bucket, f"ss/{date}/{user}/{file_name}")
-        buffer = BytesIO(response.read())
-        buffer.seek(0)
-        
         return StreamingResponse(buffer, media_type="image/png")
     except Exception as e:
         return JSONResponse(status_code=400, content={"error": str(e)})
