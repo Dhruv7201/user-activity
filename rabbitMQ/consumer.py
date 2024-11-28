@@ -125,8 +125,6 @@ if any error occurs it will reconnect to the rabbitMQ and start consuming the da
 while True:
     try:
         channel, connection = connect_to_rabbitmq()
-        # clear the queue
-        channel.queue_purge("json_queue")
         channel.basic_consume(
             queue="json_queue", on_message_callback=callback, auto_ack=True
         )
