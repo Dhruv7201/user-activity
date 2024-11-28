@@ -1,4 +1,3 @@
-import re
 from fastapi import APIRouter, Query, Header
 from fastapi.responses import JSONResponse
 from datetime import datetime, timedelta

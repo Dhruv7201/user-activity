@@ -2,7 +2,6 @@ from fastapi import APIRouter, Query, Header
 from fastapi.responses import JSONResponse
 from datetime import datetime, timedelta
 from methods.db_method import db_connection
-import json
 
 api_totalTime = APIRouter()
 

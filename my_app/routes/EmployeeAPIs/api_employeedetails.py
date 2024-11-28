@@ -3,7 +3,6 @@ from fastapi.responses import JSONResponse
 from datetime import datetime, timedelta
 from methods.db_method import db_connection
 
-import re
 
 api_employeedetails = APIRouter()
 today = datetime.now().strftime("%Y-%m-%d")

@@ -1,0 +1,23 @@
+.dropdown-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.custom-dropdown {
+  appearance: none; /* Remove default arrow */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 30px; /* Add space for custom arrow */
+  position: relative;
+  cursor: pointer;
+}
+
+.dropdown-icon {
+  position: absolute;
+  right: 10px; /* Position it near the right edge */
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none; /* Prevent icon from blocking dropdown clicks */
+  cursor: pointer;
+}

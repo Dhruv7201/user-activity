@@ -14,7 +14,6 @@ from utiles.utiles import (
     write_error_in_rabbitMQ,
 )
 from utiles.startup import startup_config
-from utiles.updater import update_exe
 import requests
 
 """

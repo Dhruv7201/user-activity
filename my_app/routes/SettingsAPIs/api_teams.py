@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Query, Path
+from fastapi import APIRouter, HTTPException, Path
 from fastapi.responses import JSONResponse
 from methods.db_method import db_connection
 

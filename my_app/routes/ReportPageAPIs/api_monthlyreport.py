@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Request, Query, Header
 from fastapi.responses import JSONResponse
-from datetime import datetime, timedelta
+from datetime import datetime
 from methods.db_method import db_connection
 
 api_monthlyreport = APIRouter()

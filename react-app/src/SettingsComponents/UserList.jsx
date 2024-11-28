@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { get, del, put } from "../api/api";
 import DataTable from "react-data-table-component";
-import { Button, Form, Row, Col } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
+import "./UserList.css";
 
 const UserList = () => {
   const [userList, setUserList] = useState([]);
+  const [originalUserNames, setOriginalUserNames] = useState({});
   const [teams, setTeams] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -12,9 +14,25 @@ const UserList = () => {
     async function fetchData() {
       try {
         const response = await get("/users");
-        setUserList(Object.entries(response.data.user_list));
+        const formattedUserList = Object.entries(response.data.user_list).map(
+          ([username, details]) => ({
+            username,
+            ...details,
+          })
+        );
+        setUserList(formattedUserList);
+
+        // Track the original user_name values
+        const originalNames = {};
+        formattedUserList.forEach((user) => {
+          originalNames[user.username] = user.user_name;
+        });
+        setOriginalUserNames(originalNames);
+
         setTeams(response.data.teams);
-      } catch (error) {}
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
     }
 
     fetchData();
@@ -25,48 +43,110 @@ const UserList = () => {
       await del(`/users/${usernameToDelete}`);
 
       const response = await get("/users");
-      setUserList(Object.entries(response.data.user_list));
-    } catch (error) {}
+      const formattedUserList = Object.entries(response.data.user_list).map(
+        ([username, details]) => ({
+          username,
+          ...details,
+        })
+      );
+      setUserList(formattedUserList);
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
   };
 
   const handleAssignTeam = async (username, team) => {
     try {
-      await updateTeamForUser(username, team);
+      await put(`/users/${username}?teamname=${team}&user_name=${null}`);
       setUserList((prevUserList) =>
-        prevUserList.map(([user, userTeam]) =>
-          user === username ? [user, team] : [user, userTeam]
+        prevUserList.map((user) =>
+          user.username === username ? { ...user, teamname: team } : user
         )
       );
-    } catch (error) {}
-  };
-
-  const updateTeamForUser = async (username, newTeam) => {
-    try {
-      // Make your API call here, for example:
-      await put(`/users/${username}?teamname=${newTeam}`);
     } catch (error) {
-      throw new Error(`Error updating team for ${username}: ${error.message}`);
+      console.error(`Error assigning team for ${username}:`, error);
     }
   };
 
-  const filteredUserList = userList.filter(([username]) =>
-    username.toLowerCase().includes(searchTerm.toLowerCase())
+  const handleSaveUserName = async (username, updatedUserName) => {
+    try {
+      // Make an API call to update the user_name
+      await put(
+        `/users/${username}?user_name=${updatedUserName}&teamname=${null}`
+      );
+
+      setUserList((prevUserList) =>
+        prevUserList.map((user) =>
+          user.username === username
+            ? { ...user, user_name: updatedUserName }
+            : user
+        )
+      );
+
+      setOriginalUserNames((prev) => ({
+        ...prev,
+        [username]: updatedUserName,
+      }));
+    } catch (error) {
+      console.error(`Error saving new username for ${username}:`, error);
+    }
+  };
+
+  const handleUserNameChange = (username, newUserName) => {
+    setUserList((prevUserList) =>
+      prevUserList.map((user) =>
+        user.username === username ? { ...user, user_name: newUserName } : user
+      )
+    );
+  };
+
+  const filteredUserList = userList.filter(
+    (user) =>
+      // search in username hostname or user
+      user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.host_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.user_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const columns = [
     {
       name: "User",
-      selector: (row) => row[0],
+      selector: (row) => row.username,
       sortable: true,
-      grow: 2,
+    },
+    {
+      name: "Host Name",
+      selector: (row) => row.host_name,
+      sortable: true,
+    },
+    {
+      name: "User Name",
+      cell: (row) => (
+        <div className="d-flex align-items-center">
+          <Form.Control
+            type="text"
+            value={row.user_name}
+            onChange={(e) => handleUserNameChange(row.username, e.target.value)}
+          />
+          {row.user_name !== originalUserNames[row.username] && (
+            <Button
+              className="ml-2 border rounded p-1 bg-primary text-white cursor-pointer"
+              onClick={() => handleSaveUserName(row.username, row.user_name)}
+            >
+              <i className="bi bi-check-lg"></i>
+            </Button>
+          )}
+        </div>
+      ),
     },
     {
       name: "Assigned To",
       cell: (row) => (
         <Form.Control
           as="select"
-          value={row[1]}
-          onChange={(e) => handleAssignTeam(row[0], e.target.value)}
+          value={row.teamname}
+          onChange={(e) => handleAssignTeam(row.username, e.target.value)}
+          className="custom-dropdown"
         >
           {teams.map((teamName) => (
             <option key={teamName} value={teamName}>
@@ -79,7 +159,7 @@ const UserList = () => {
     {
       name: "Action",
       cell: (row) => (
-        <Button variant="danger" onClick={() => handleDeleteUser(row[0])}>
+        <Button variant="danger" onClick={() => handleDeleteUser(row.username)}>
           Delete
         </Button>
       ),
@@ -121,10 +201,10 @@ const UserList = () => {
         paginationPerPageOptions={[10, 25, 50]}
         highlightOnHover
         striped
-        paginationServer
       />
     </div>
   );
 };
 
 export default UserList;
+
