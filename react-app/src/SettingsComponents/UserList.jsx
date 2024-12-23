@@ -193,15 +193,27 @@ const UserList = () => {
           </div>
         </div>
       </div>
-      <DataTable
-        title="User List"
-        columns={columns}
-        data={filteredUserList}
-        pagination
-        paginationPerPageOptions={[10, 25, 50]}
-        highlightOnHover
-        striped
-      />
+      <div class="pagetitle">
+        <h1>User List</h1>
+      </div>
+      <div className="card mb-4">
+        <div className="card-body pt-4">
+          <div className="search-bar">
+            <div className="row mb-2">
+              <div className="col">
+                <DataTable
+                  columns={columns}
+                  data={filteredUserList}
+                  pagination
+                  paginationPerPageOptions={[10, 25, 50]}
+                  highlightOnHover
+                  striped
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
