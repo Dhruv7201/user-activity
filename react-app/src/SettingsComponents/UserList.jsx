@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { get, del, put } from "../api/api";
 import DataTable from "react-data-table-component";
 import { Button, Form } from "react-bootstrap";
@@ -193,7 +193,7 @@ const UserList = () => {
           </div>
         </div>
       </div>
-      <div class="pagetitle">
+      <div className="pagetitle">
         <h1>User List</h1>
       </div>
       <div className="card mb-4">
@@ -219,4 +219,3 @@ const UserList = () => {
 };
 
 export default UserList;
-
