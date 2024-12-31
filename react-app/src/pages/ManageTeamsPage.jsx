@@ -101,9 +101,11 @@ const ManageTeamsPage = () => {
                   className="d-flex justify-content-between"
                 >
                   {team}
+                  {team != "admin" && (
                   <Button variant="danger" onClick={() => deleteTeam(index)}>
                     Delete
                   </Button>
+                  )}
                 </ListGroup.Item>
               ))}
             </ListGroup>
@@ -117,3 +119,4 @@ const ManageTeamsPage = () => {
 };
 
 export default ManageTeamsPage;
+
